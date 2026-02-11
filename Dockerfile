@@ -31,10 +31,9 @@ COPY prisma ./prisma
 COPY prisma.config.ts ./
 COPY --from=build /app/node_modules/.prisma ./node_modules/.prisma
 
-# Copy Prisma CLI, dotenv, and tsx from build stage (needed for migrations and seeding)
+# Copy Prisma CLI and dotenv from build stage (needed for migrations)
 COPY --from=build /app/node_modules/prisma ./node_modules/prisma
 COPY --from=build /app/node_modules/dotenv ./node_modules/dotenv
-COPY --from=build /app/node_modules/tsx ./node_modules/tsx
 
 # Copy built application
 COPY --from=build /app/dist ./dist
@@ -42,5 +41,5 @@ COPY --from=build /app/dist ./dist
 ENV PORT=3000
 EXPOSE 3000
 
-# Run migrations, seed, and start server
-CMD ["sh", "-c", "npx prisma migrate deploy && npx prisma db seed && node dist/index.js"]
+# Run migrations and start server
+CMD ["sh", "-c", "npx prisma migrate deploy && node dist/index.js"]

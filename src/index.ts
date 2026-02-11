@@ -2,7 +2,9 @@ import 'dotenv/config';
 import { serve } from '@hono/node-server';
 import { Hono } from 'hono';
 import { errorHandler } from './lib/errors.js';
+import prisma from './lib/prisma.js';
 import type { AppEnv } from './lib/types.js';
+import { ensureAdminUser } from './lib/admin-seed.js';
 
 import auth from './routes/auth.js';
 import verify from './routes/verify.js';
@@ -23,6 +25,15 @@ app.onError(errorHandler);
 // Health check
 app.get('/', (c) => c.json({ status: 'ok' }));
 
+app.get('/health', async (c) => {
+  try {
+    await prisma.$queryRaw`SELECT 1`;
+    return c.json({ status: 'ok', database: 'connected' });
+  } catch {
+    return c.json({ status: 'error', database: 'disconnected' }, 503);
+  }
+});
+
 // Mount routes
 const api = new Hono<AppEnv>();
 
@@ -41,9 +52,20 @@ app.route('/api/v1', api);
 
 const port = parseInt(process.env.PORT || '3000', 10);
 
-serve({
+const server = serve({
   fetch: app.fetch,
   port,
-}, (info) => {
+}, async (info) => {
   console.log(`Server is running on http://localhost:${info.port}`);
+  await ensureAdminUser();
 });
+
+const shutdown = async (signal: string) => {
+  console.log(`${signal} received, shutting down gracefully...`);
+  server.close();
+  await prisma.$disconnect();
+  process.exit(0);
+};
+
+process.on('SIGTERM', () => shutdown('SIGTERM'));
+process.on('SIGINT', () => shutdown('SIGINT'));

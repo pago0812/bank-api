@@ -36,14 +36,14 @@ export async function createPayment(data: {
       data: { balance: { decrement: data.amount } },
     });
 
-    const transaction = await tx.transaction.create({
+    await tx.transaction.create({
       data: {
         accountId: data.accountId,
         type: 'DEBIT',
         amount: data.amount,
         balanceAfter: updatedAccount.balance,
         description: data.description || `Payment to ${data.beneficiaryName}`,
-        status: 'PENDING',
+        status: 'COMPLETED',
         counterpartyName: data.beneficiaryName,
         counterpartyBank: data.beneficiaryBank,
       },
@@ -57,27 +57,9 @@ export async function createPayment(data: {
         beneficiaryBank: data.beneficiaryBank,
         beneficiaryAccount: data.beneficiaryAccount,
         description: data.description,
-        status: 'PENDING',
+        status: 'COMPLETED',
       },
     });
-
-    // Auto-complete after 5 seconds
-    setTimeout(async () => {
-      try {
-        await prisma.$transaction(async (tx2) => {
-          await tx2.payment.update({
-            where: { id: payment.id },
-            data: { status: 'COMPLETED' },
-          });
-          await tx2.transaction.update({
-            where: { id: transaction.id },
-            data: { status: 'COMPLETED' },
-          });
-        });
-      } catch (err) {
-        console.error('Failed to auto-complete payment:', err);
-      }
-    }, 5000);
 
     return payment;
   });
