@@ -29,7 +29,6 @@ RUN npm ci --omit=dev
 # Copy Prisma schema, migrations, and config for migrate deploy
 COPY prisma ./prisma
 COPY prisma.config.ts ./
-COPY --from=build /app/node_modules/.prisma ./node_modules/.prisma
 
 # Copy Prisma CLI and dotenv from build stage (needed for migrations)
 COPY --from=build /app/node_modules/prisma ./node_modules/prisma
