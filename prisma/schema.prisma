@@ -1,0 +1,239 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum AccountType {
+  CHECKING
+  SAVINGS
+}
+
+enum AccountStatus {
+  ACTIVE
+  FROZEN
+  CLOSED
+}
+
+enum TransactionType {
+  CREDIT
+  DEBIT
+}
+
+enum TransactionStatus {
+  PENDING
+  COMPLETED
+  FAILED
+}
+
+enum TransferStatus {
+  PENDING
+  COMPLETED
+  FAILED
+}
+
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+  FAILED
+}
+
+enum CardType {
+  DEBIT
+  CREDIT
+}
+
+enum CardStatus {
+  ACTIVE
+  BLOCKED
+  EXPIRED
+  CANCELLED
+}
+
+enum DepositStatus {
+  PENDING
+  COMPLETED
+  FAILED
+}
+
+enum WithdrawalStatus {
+  PENDING
+  COMPLETED
+  FAILED
+}
+
+enum VerificationSessionStatus {
+  IN_PROGRESS
+  VERIFIED
+  FAILED
+  EXPIRED
+}
+
+enum CustomerStatus {
+  ACTIVE
+  SUSPENDED
+  CLOSED
+}
+
+model Customer {
+  id          String         @id @default(uuid())
+  email       String         @unique
+  password    String         // bcrypt hash
+  firstName   String
+  lastName    String
+  dateOfBirth DateTime
+  phone       String         @unique
+  address     String         // full address string
+  zipCode     String
+  status      CustomerStatus @default(ACTIVE)
+  kycVerified Boolean        @default(false)
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+
+  accounts             Account[]
+  refreshTokens        RefreshToken[]
+  verificationSessions VerificationSession[]
+}
+
+model Account {
+  id            String        @id @default(uuid())
+  customerId    String
+  accountNumber String        @unique // 10-digit number
+  type          AccountType
+  currency      String        @default("USD")
+  balance       Int           @default(0) // in cents
+  status        AccountStatus @default(ACTIVE)
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  customer     Customer      @relation(fields: [customerId], references: [id])
+  transactions Transaction[]
+  cards        Card[]
+  deposits     Deposit[]
+  withdrawals  Withdrawal[]
+
+  transfersFrom Transfer[] @relation("TransferFrom")
+  transfersTo   Transfer[] @relation("TransferTo")
+  payments      Payment[]
+}
+
+model Transaction {
+  id                String            @id @default(uuid())
+  accountId         String
+  type              TransactionType
+  amount            Int               // in cents, always positive
+  balanceAfter      Int               // in cents
+  description       String
+  reference         String            @unique @default(uuid())
+  status            TransactionStatus @default(COMPLETED)
+  counterpartyName  String?
+  counterpartyBank  String?
+  createdAt         DateTime          @default(now())
+
+  account Account @relation(fields: [accountId], references: [id])
+}
+
+model Transfer {
+  id            String         @id @default(uuid())
+  fromAccountId String
+  toAccountId   String
+  amount        Int            // in cents
+  description   String?
+  status        TransferStatus @default(PENDING)
+  reference     String         @unique @default(uuid())
+  createdAt     DateTime       @default(now())
+
+  fromAccount Account @relation("TransferFrom", fields: [fromAccountId], references: [id])
+  toAccount   Account @relation("TransferTo", fields: [toAccountId], references: [id])
+}
+
+model Payment {
+  id                 String        @id @default(uuid())
+  accountId          String
+  amount             Int           // in cents
+  beneficiaryName    String
+  beneficiaryBank    String
+  beneficiaryAccount String
+  reference          String        @unique @default(uuid())
+  description        String?
+  status             PaymentStatus @default(PENDING)
+  createdAt          DateTime      @default(now())
+
+  account Account @relation(fields: [accountId], references: [id])
+}
+
+model Card {
+  id           String     @id @default(uuid())
+  accountId    String
+  cardNumber   String     @unique // stored encrypted/hashed
+  maskedNumber String     // e.g. "****-****-****-1234"
+  expiryDate   String     // MM/YY format
+  cvv          String     // stored hashed, never returned after creation
+  type         CardType
+  status       CardStatus @default(ACTIVE)
+  dailyLimit   Int        @default(500000) // in cents ($5,000)
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  account Account @relation(fields: [accountId], references: [id])
+}
+
+model Deposit {
+  id        String        @id @default(uuid())
+  accountId String
+  amount    Int           // in cents
+  reference String        @unique @default(uuid())
+  source    String        // e.g. "CASH", "CHECK", "WIRE"
+  status    DepositStatus @default(COMPLETED)
+  createdAt DateTime      @default(now())
+
+  account Account @relation(fields: [accountId], references: [id])
+}
+
+model Withdrawal {
+  id        String           @id @default(uuid())
+  accountId String
+  amount    Int              // in cents
+  reference String           @unique @default(uuid())
+  channel   String           // e.g. "ATM", "TELLER", "ONLINE"
+  status    WithdrawalStatus @default(COMPLETED)
+  createdAt DateTime         @default(now())
+
+  account Account @relation(fields: [accountId], references: [id])
+}
+
+model VerificationSession {
+  id             String                    @id @default(uuid())
+  phoneNumber    String
+  customerId     String?
+  status         VerificationSessionStatus @default(IN_PROGRESS)
+  confidence     Float                     @default(0) // 0.0 to 1.0
+  questionsAsked Json                      @default("[]") // array of question IDs asked
+  correctAnswers Int                       @default(0)
+  createdAt      DateTime                  @default(now())
+  expiresAt      DateTime                  // createdAt + 10 minutes
+
+  customer Customer? @relation(fields: [customerId], references: [id])
+}
+
+model RefreshToken {
+  id         String   @id @default(uuid())
+  customerId String
+  token      String   @unique
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+
+  customer Customer @relation(fields: [customerId], references: [id])
+}
+
+model IdempotencyRecord {
+  key       String   @id
+  route     String   // method + path
+  body      String   // hashed request body
+  response  Json     // stored response
+  status    Int      // HTTP status code
+  createdAt DateTime @default(now())
+}
