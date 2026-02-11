@@ -61,6 +61,9 @@ export const ModelName = {
   Withdrawal: 'Withdrawal',
   VerificationSession: 'VerificationSession',
   RefreshToken: 'RefreshToken',
+  Employee: 'Employee',
+  EmployeeRefreshToken: 'EmployeeRefreshToken',
+  AuditLog: 'AuditLog',
   IdempotencyRecord: 'IdempotencyRecord'
 } as const
 
@@ -228,6 +231,46 @@ export const RefreshTokenScalarFieldEnum = {
 } as const
 
 export type RefreshTokenScalarFieldEnum = (typeof RefreshTokenScalarFieldEnum)[keyof typeof RefreshTokenScalarFieldEnum]
+
+
+export const EmployeeScalarFieldEnum = {
+  id: 'id',
+  employeeId: 'employeeId',
+  email: 'email',
+  password: 'password',
+  firstName: 'firstName',
+  lastName: 'lastName',
+  role: 'role',
+  active: 'active',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type EmployeeScalarFieldEnum = (typeof EmployeeScalarFieldEnum)[keyof typeof EmployeeScalarFieldEnum]
+
+
+export const EmployeeRefreshTokenScalarFieldEnum = {
+  id: 'id',
+  employeeId: 'employeeId',
+  token: 'token',
+  expiresAt: 'expiresAt',
+  createdAt: 'createdAt'
+} as const
+
+export type EmployeeRefreshTokenScalarFieldEnum = (typeof EmployeeRefreshTokenScalarFieldEnum)[keyof typeof EmployeeRefreshTokenScalarFieldEnum]
+
+
+export const AuditLogScalarFieldEnum = {
+  id: 'id',
+  employeeId: 'employeeId',
+  action: 'action',
+  entityType: 'entityType',
+  entityId: 'entityId',
+  details: 'details',
+  createdAt: 'createdAt'
+} as const
+
+export type AuditLogScalarFieldEnum = (typeof AuditLogScalarFieldEnum)[keyof typeof AuditLogScalarFieldEnum]
 
 
 export const IdempotencyRecordScalarFieldEnum = {

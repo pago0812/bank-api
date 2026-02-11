@@ -14,6 +14,9 @@ async function main() {
   console.log('Seeding database...');
 
   // Clean existing data
+  await prisma.auditLog.deleteMany();
+  await prisma.employeeRefreshToken.deleteMany();
+  await prisma.employee.deleteMany();
   await prisma.idempotencyRecord.deleteMany();
   await prisma.refreshToken.deleteMany();
   await prisma.verificationSession.deleteMany();
@@ -292,6 +295,64 @@ async function main() {
       beneficiaryAccount: '7654321098',
       description: 'Insurance payment',
       status: 'COMPLETED',
+    },
+  });
+
+  // Create employees
+  const empHash1 = await bcrypt.hash('admin123', 10);
+  const empHash2 = await bcrypt.hash('manager123', 10);
+  const empHash3 = await bcrypt.hash('teller123', 10);
+  const empHash4 = await bcrypt.hash('agent123', 10);
+
+  await prisma.employee.create({
+    data: {
+      id: 'emp_01',
+      employeeId: 'EMP-001',
+      email: 'admin@bank.com',
+      password: empHash1,
+      firstName: 'Alice',
+      lastName: 'Admin',
+      role: 'ADMIN',
+      active: true,
+    },
+  });
+
+  await prisma.employee.create({
+    data: {
+      id: 'emp_02',
+      employeeId: 'EMP-002',
+      email: 'manager@bank.com',
+      password: empHash2,
+      firstName: 'Mark',
+      lastName: 'Manager',
+      role: 'MANAGER',
+      active: true,
+    },
+  });
+
+  await prisma.employee.create({
+    data: {
+      id: 'emp_03',
+      employeeId: 'EMP-003',
+      email: 'teller@bank.com',
+      password: empHash3,
+      firstName: 'Tom',
+      lastName: 'Teller',
+      role: 'TELLER',
+      active: true,
+    },
+  });
+
+  await prisma.employee.create({
+    data: {
+      id: 'emp_04',
+      employeeId: 'EMP-004',
+      email: 'agent@bank.com',
+      password: empHash4,
+      firstName: 'Carol',
+      lastName: 'Agent',
+      role: 'CALL_CENTER_AGENT',
+      active: true,
     },
   });
 

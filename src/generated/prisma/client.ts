@@ -90,6 +90,21 @@ export type VerificationSession = Prisma.VerificationSessionModel
  */
 export type RefreshToken = Prisma.RefreshTokenModel
 /**
+ * Model Employee
+ * 
+ */
+export type Employee = Prisma.EmployeeModel
+/**
+ * Model EmployeeRefreshToken
+ * 
+ */
+export type EmployeeRefreshToken = Prisma.EmployeeRefreshTokenModel
+/**
+ * Model AuditLog
+ * 
+ */
+export type AuditLog = Prisma.AuditLogModel
+/**
  * Model IdempotencyRecord
  * 
  */

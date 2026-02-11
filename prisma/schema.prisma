@@ -79,6 +79,13 @@ enum CustomerStatus {
   CLOSED
 }
 
+enum EmployeeRole {
+  TELLER
+  MANAGER
+  ADMIN
+  CALL_CENTER_AGENT
+}
+
 model Customer {
   id          String         @id @default(uuid())
   email       String         @unique
@@ -228,6 +235,48 @@ model RefreshToken {
   createdAt  DateTime @default(now())
 
   customer Customer @relation(fields: [customerId], references: [id])
+}
+
+model Employee {
+  id         String       @id @default(uuid())
+  employeeId String       @unique // e.g. "EMP-001"
+  email      String       @unique
+  password   String       // bcrypt hash
+  firstName  String
+  lastName   String
+  role       EmployeeRole
+  active     Boolean      @default(true)
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
+
+  refreshTokens EmployeeRefreshToken[]
+  auditLogs     AuditLog[]
+}
+
+model EmployeeRefreshToken {
+  id         String   @id @default(uuid())
+  employeeId String
+  token      String   @unique
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+
+  employee Employee @relation(fields: [employeeId], references: [id])
+}
+
+model AuditLog {
+  id         String   @id @default(uuid())
+  employeeId String
+  action     String   // e.g. "CUSTOMER_CREATED", "ACCOUNT_FROZEN"
+  entityType String   // e.g. "Customer", "Account", "Card"
+  entityId   String
+  details    Json     // action-specific details
+  createdAt  DateTime @default(now())
+
+  employee Employee @relation(fields: [employeeId], references: [id])
+
+  @@index([employeeId])
+  @@index([entityType, entityId])
+  @@index([createdAt])
 }
 
 model IdempotencyRecord {

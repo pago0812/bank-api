@@ -101,3 +101,27 @@ export async function listPayments(params: {
 
   return { data, total };
 }
+
+export async function listPaymentsAdmin(params: {
+  page: number;
+  limit: number;
+  skip: number;
+  accountId?: string;
+  status?: string;
+}) {
+  const where: any = {};
+  if (params.accountId) where.accountId = params.accountId;
+  if (params.status) where.status = params.status;
+
+  const [data, total] = await Promise.all([
+    prisma.payment.findMany({
+      where,
+      skip: params.skip,
+      take: params.limit,
+      orderBy: { createdAt: 'desc' },
+    }),
+    prisma.payment.count({ where }),
+  ]);
+
+  return { data, total };
+}

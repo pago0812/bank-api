@@ -142,6 +142,31 @@ export async function listCards(params: {
   return { data, total };
 }
 
+export async function listCardsAdmin(params: {
+  page: number;
+  limit: number;
+  skip: number;
+  accountId?: string;
+  status?: string;
+}) {
+  const where: any = {};
+  if (params.accountId) where.accountId = params.accountId;
+  if (params.status) where.status = params.status;
+
+  const [data, total] = await Promise.all([
+    prisma.card.findMany({
+      where,
+      select: cardSelectPublic,
+      skip: params.skip,
+      take: params.limit,
+      orderBy: { createdAt: 'desc' },
+    }),
+    prisma.card.count({ where }),
+  ]);
+
+  return { data, total };
+}
+
 export async function getCard(id: string) {
   const card = await prisma.card.findUnique({
     where: { id },

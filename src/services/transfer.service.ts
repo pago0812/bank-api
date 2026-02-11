@@ -105,3 +105,29 @@ export async function getTransfer(id: string) {
   }
   return transfer;
 }
+
+export async function listTransfers(params: {
+  page: number;
+  limit: number;
+  skip: number;
+  fromAccountId?: string;
+  toAccountId?: string;
+  status?: string;
+}) {
+  const where: any = {};
+  if (params.fromAccountId) where.fromAccountId = params.fromAccountId;
+  if (params.toAccountId) where.toAccountId = params.toAccountId;
+  if (params.status) where.status = params.status;
+
+  const [data, total] = await Promise.all([
+    prisma.transfer.findMany({
+      where,
+      skip: params.skip,
+      take: params.limit,
+      orderBy: { createdAt: 'desc' },
+    }),
+    prisma.transfer.count({ where }),
+  ]);
+
+  return { data, total };
+}

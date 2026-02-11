@@ -114,3 +114,13 @@ export const CustomerStatus = {
 } as const
 
 export type CustomerStatus = (typeof CustomerStatus)[keyof typeof CustomerStatus]
+
+
+export const EmployeeRole = {
+  TELLER: 'TELLER',
+  MANAGER: 'MANAGER',
+  ADMIN: 'ADMIN',
+  CALL_CENTER_AGENT: 'CALL_CENTER_AGENT'
+} as const
+
+export type EmployeeRole = (typeof EmployeeRole)[keyof typeof EmployeeRole]

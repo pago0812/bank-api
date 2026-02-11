@@ -394,6 +394,9 @@ export const ModelName = {
   Withdrawal: 'Withdrawal',
   VerificationSession: 'VerificationSession',
   RefreshToken: 'RefreshToken',
+  Employee: 'Employee',
+  EmployeeRefreshToken: 'EmployeeRefreshToken',
+  AuditLog: 'AuditLog',
   IdempotencyRecord: 'IdempotencyRecord'
 } as const
 
@@ -410,7 +413,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "customer" | "account" | "transaction" | "transfer" | "payment" | "card" | "deposit" | "withdrawal" | "verificationSession" | "refreshToken" | "idempotencyRecord"
+    modelProps: "customer" | "account" | "transaction" | "transfer" | "payment" | "card" | "deposit" | "withdrawal" | "verificationSession" | "refreshToken" | "employee" | "employeeRefreshToken" | "auditLog" | "idempotencyRecord"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1154,6 +1157,228 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    Employee: {
+      payload: Prisma.$EmployeePayload<ExtArgs>
+      fields: Prisma.EmployeeFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.EmployeeFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmployeePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.EmployeeFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmployeePayload>
+        }
+        findFirst: {
+          args: Prisma.EmployeeFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmployeePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.EmployeeFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmployeePayload>
+        }
+        findMany: {
+          args: Prisma.EmployeeFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmployeePayload>[]
+        }
+        create: {
+          args: Prisma.EmployeeCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmployeePayload>
+        }
+        createMany: {
+          args: Prisma.EmployeeCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.EmployeeCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmployeePayload>[]
+        }
+        delete: {
+          args: Prisma.EmployeeDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmployeePayload>
+        }
+        update: {
+          args: Prisma.EmployeeUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmployeePayload>
+        }
+        deleteMany: {
+          args: Prisma.EmployeeDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.EmployeeUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.EmployeeUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmployeePayload>[]
+        }
+        upsert: {
+          args: Prisma.EmployeeUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmployeePayload>
+        }
+        aggregate: {
+          args: Prisma.EmployeeAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateEmployee>
+        }
+        groupBy: {
+          args: Prisma.EmployeeGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.EmployeeGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.EmployeeCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.EmployeeCountAggregateOutputType> | number
+        }
+      }
+    }
+    EmployeeRefreshToken: {
+      payload: Prisma.$EmployeeRefreshTokenPayload<ExtArgs>
+      fields: Prisma.EmployeeRefreshTokenFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.EmployeeRefreshTokenFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmployeeRefreshTokenPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.EmployeeRefreshTokenFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmployeeRefreshTokenPayload>
+        }
+        findFirst: {
+          args: Prisma.EmployeeRefreshTokenFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmployeeRefreshTokenPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.EmployeeRefreshTokenFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmployeeRefreshTokenPayload>
+        }
+        findMany: {
+          args: Prisma.EmployeeRefreshTokenFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmployeeRefreshTokenPayload>[]
+        }
+        create: {
+          args: Prisma.EmployeeRefreshTokenCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmployeeRefreshTokenPayload>
+        }
+        createMany: {
+          args: Prisma.EmployeeRefreshTokenCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.EmployeeRefreshTokenCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmployeeRefreshTokenPayload>[]
+        }
+        delete: {
+          args: Prisma.EmployeeRefreshTokenDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmployeeRefreshTokenPayload>
+        }
+        update: {
+          args: Prisma.EmployeeRefreshTokenUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmployeeRefreshTokenPayload>
+        }
+        deleteMany: {
+          args: Prisma.EmployeeRefreshTokenDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.EmployeeRefreshTokenUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.EmployeeRefreshTokenUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmployeeRefreshTokenPayload>[]
+        }
+        upsert: {
+          args: Prisma.EmployeeRefreshTokenUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmployeeRefreshTokenPayload>
+        }
+        aggregate: {
+          args: Prisma.EmployeeRefreshTokenAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateEmployeeRefreshToken>
+        }
+        groupBy: {
+          args: Prisma.EmployeeRefreshTokenGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.EmployeeRefreshTokenGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.EmployeeRefreshTokenCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.EmployeeRefreshTokenCountAggregateOutputType> | number
+        }
+      }
+    }
+    AuditLog: {
+      payload: Prisma.$AuditLogPayload<ExtArgs>
+      fields: Prisma.AuditLogFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.AuditLogFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AuditLogPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.AuditLogFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AuditLogPayload>
+        }
+        findFirst: {
+          args: Prisma.AuditLogFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AuditLogPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.AuditLogFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AuditLogPayload>
+        }
+        findMany: {
+          args: Prisma.AuditLogFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AuditLogPayload>[]
+        }
+        create: {
+          args: Prisma.AuditLogCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AuditLogPayload>
+        }
+        createMany: {
+          args: Prisma.AuditLogCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.AuditLogCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AuditLogPayload>[]
+        }
+        delete: {
+          args: Prisma.AuditLogDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AuditLogPayload>
+        }
+        update: {
+          args: Prisma.AuditLogUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AuditLogPayload>
+        }
+        deleteMany: {
+          args: Prisma.AuditLogDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.AuditLogUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.AuditLogUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AuditLogPayload>[]
+        }
+        upsert: {
+          args: Prisma.AuditLogUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AuditLogPayload>
+        }
+        aggregate: {
+          args: Prisma.AuditLogAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateAuditLog>
+        }
+        groupBy: {
+          args: Prisma.AuditLogGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AuditLogGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.AuditLogCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AuditLogCountAggregateOutputType> | number
+        }
+      }
+    }
     IdempotencyRecord: {
       payload: Prisma.$IdempotencyRecordPayload<ExtArgs>
       fields: Prisma.IdempotencyRecordFieldRefs
@@ -1415,6 +1640,46 @@ export const RefreshTokenScalarFieldEnum = {
 } as const
 
 export type RefreshTokenScalarFieldEnum = (typeof RefreshTokenScalarFieldEnum)[keyof typeof RefreshTokenScalarFieldEnum]
+
+
+export const EmployeeScalarFieldEnum = {
+  id: 'id',
+  employeeId: 'employeeId',
+  email: 'email',
+  password: 'password',
+  firstName: 'firstName',
+  lastName: 'lastName',
+  role: 'role',
+  active: 'active',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type EmployeeScalarFieldEnum = (typeof EmployeeScalarFieldEnum)[keyof typeof EmployeeScalarFieldEnum]
+
+
+export const EmployeeRefreshTokenScalarFieldEnum = {
+  id: 'id',
+  employeeId: 'employeeId',
+  token: 'token',
+  expiresAt: 'expiresAt',
+  createdAt: 'createdAt'
+} as const
+
+export type EmployeeRefreshTokenScalarFieldEnum = (typeof EmployeeRefreshTokenScalarFieldEnum)[keyof typeof EmployeeRefreshTokenScalarFieldEnum]
+
+
+export const AuditLogScalarFieldEnum = {
+  id: 'id',
+  employeeId: 'employeeId',
+  action: 'action',
+  entityType: 'entityType',
+  entityId: 'entityId',
+  details: 'details',
+  createdAt: 'createdAt'
+} as const
+
+export type AuditLogScalarFieldEnum = (typeof AuditLogScalarFieldEnum)[keyof typeof AuditLogScalarFieldEnum]
 
 
 export const IdempotencyRecordScalarFieldEnum = {
@@ -1719,6 +1984,20 @@ export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'J
 export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
     
 
+
+/**
+ * Reference to a field of type 'EmployeeRole'
+ */
+export type EnumEmployeeRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'EmployeeRole'>
+    
+
+
+/**
+ * Reference to a field of type 'EmployeeRole[]'
+ */
+export type ListEnumEmployeeRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'EmployeeRole[]'>
+    
+
 /**
  * Batch Payload for updateMany & deleteMany & createMany
  */
@@ -1824,6 +2103,9 @@ export type GlobalOmitConfig = {
   withdrawal?: Prisma.WithdrawalOmit
   verificationSession?: Prisma.VerificationSessionOmit
   refreshToken?: Prisma.RefreshTokenOmit
+  employee?: Prisma.EmployeeOmit
+  employeeRefreshToken?: Prisma.EmployeeRefreshTokenOmit
+  auditLog?: Prisma.AuditLogOmit
   idempotencyRecord?: Prisma.IdempotencyRecordOmit
 }
 

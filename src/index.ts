@@ -4,10 +4,9 @@ import { Hono } from 'hono';
 import { errorHandler } from './lib/errors.js';
 import prisma from './lib/prisma.js';
 import type { AppEnv } from './lib/types.js';
-import { ensureAdminUser } from './lib/admin-seed.js';
+import { ensureAdminEmployee } from './lib/admin-seed.js';
 
 import auth from './routes/auth.js';
-import verify from './routes/verify.js';
 import customers from './routes/customers.js';
 import accounts from './routes/accounts.js';
 import transactions from './routes/transactions.js';
@@ -16,6 +15,17 @@ import payments from './routes/payments.js';
 import cards from './routes/cards.js';
 import deposits from './routes/deposits.js';
 import withdrawals from './routes/withdrawals.js';
+
+import adminAuth from './routes/admin/auth.js';
+import adminVerify from './routes/admin/verify.js';
+import adminCustomers from './routes/admin/customers.js';
+import adminAccounts from './routes/admin/accounts.js';
+import adminCards from './routes/admin/cards.js';
+import adminDeposits from './routes/admin/deposits.js';
+import adminWithdrawals from './routes/admin/withdrawals.js';
+import adminTransactions from './routes/admin/transactions.js';
+import adminTransfers from './routes/admin/transfers.js';
+import adminPayments from './routes/admin/payments.js';
 
 const app = new Hono<AppEnv>();
 
@@ -34,11 +44,10 @@ app.get('/health', async (c) => {
   }
 });
 
-// Mount routes
+// Customer routes
 const api = new Hono<AppEnv>();
 
 api.route('/auth', auth);
-api.route('/auth/verify', verify);
 api.route('/customers', customers);
 api.route('/accounts', accounts);
 api.route('/transactions', transactions);
@@ -47,6 +56,18 @@ api.route('/payments', payments);
 api.route('/cards', cards);
 api.route('/deposits', deposits);
 api.route('/withdrawals', withdrawals);
+
+// Admin routes
+api.route('/admin/auth', adminAuth);
+api.route('/admin/verify', adminVerify);
+api.route('/admin/customers', adminCustomers);
+api.route('/admin/accounts', adminAccounts);
+api.route('/admin/cards', adminCards);
+api.route('/admin/deposits', adminDeposits);
+api.route('/admin/withdrawals', adminWithdrawals);
+api.route('/admin/transactions', adminTransactions);
+api.route('/admin/transfers', adminTransfers);
+api.route('/admin/payments', adminPayments);
 
 app.route('/api/v1', api);
 
@@ -57,7 +78,7 @@ const server = serve({
   port,
 }, async (info) => {
   console.log(`Server is running on http://localhost:${info.port}`);
-  await ensureAdminUser();
+  await ensureAdminEmployee();
 });
 
 const shutdown = async (signal: string) => {
