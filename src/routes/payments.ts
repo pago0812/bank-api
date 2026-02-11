@@ -3,8 +3,8 @@ import * as paymentService from '../services/payment.service.js';
 import { authMiddleware } from '../middleware/auth.js';
 import { idempotencyMiddleware, saveIdempotencyRecord } from '../lib/idempotency.js';
 import { parsePagination, paginatedResponse } from '../lib/pagination.js';
-import { AppError } from '../lib/errors.js';
 import { assertAccountOwnership } from '../lib/authorization.js';
+import { validate, createPaymentSchema } from '../lib/validation.js';
 import type { AppEnv } from '../lib/types.js';
 
 const payments = new Hono<AppEnv>();
@@ -12,15 +12,8 @@ const payments = new Hono<AppEnv>();
 payments.use('*', authMiddleware);
 
 payments.post('/', idempotencyMiddleware, async (c) => {
-  const body = c.get('parsedBody') || (await c.req.json());
-
-  const required = ['accountId', 'amount', 'beneficiaryName', 'beneficiaryBank', 'beneficiaryAccount'];
-  const missing = required.filter((f) => body[f] === undefined || body[f] === null || body[f] === '');
-  if (missing.length > 0) {
-    throw new AppError(422, 'VALIDATION_ERROR', 'Validation failed',
-      missing.map((f) => ({ field: f, message: `${f} is required` })),
-    );
-  }
+  const raw = c.get('parsedBody') || (await c.req.json());
+  const body = validate(createPaymentSchema, raw);
 
   await assertAccountOwnership(body.accountId, c.get('customerId'));
 

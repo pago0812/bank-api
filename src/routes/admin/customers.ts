@@ -4,7 +4,7 @@ import { adminAuthMiddleware, requireRole } from '../../middleware/admin-auth.js
 import { idempotencyMiddleware, saveIdempotencyRecord } from '../../lib/idempotency.js';
 import { parsePagination, paginatedResponse } from '../../lib/pagination.js';
 import { createAuditLog } from '../../services/audit.service.js';
-import { AppError } from '../../lib/errors.js';
+import { validate, createCustomerSchema, adminUpdateCustomerSchema } from '../../lib/validation.js';
 import type { AppEnv } from '../../lib/types.js';
 
 const adminCustomers = new Hono<AppEnv>();
@@ -12,21 +12,8 @@ const adminCustomers = new Hono<AppEnv>();
 adminCustomers.use('*', adminAuthMiddleware);
 
 adminCustomers.post('/', requireRole('TELLER', 'MANAGER', 'ADMIN'), idempotencyMiddleware, async (c) => {
-  const body = c.get('parsedBody') || (await c.req.json());
-
-  const required = ['email', 'password', 'firstName', 'lastName', 'dateOfBirth', 'phone', 'address', 'zipCode'];
-  const missing = required.filter((f) => !body[f]);
-  if (missing.length > 0) {
-    throw new AppError(422, 'VALIDATION_ERROR', 'Validation failed',
-      missing.map((f) => ({ field: f, message: `${f} is required` })),
-    );
-  }
-
-  if (body.password && body.password.length < 8) {
-    throw new AppError(422, 'VALIDATION_ERROR', 'Validation failed', [
-      { field: 'password', message: 'Password must be at least 8 characters' },
-    ]);
-  }
+  const raw = c.get('parsedBody') || (await c.req.json());
+  const body = validate(createCustomerSchema, raw);
 
   const result = await customerService.createCustomer(body);
 
@@ -59,7 +46,7 @@ adminCustomers.get('/:id', async (c) => {
 });
 
 adminCustomers.patch('/:id', requireRole('MANAGER', 'ADMIN'), async (c) => {
-  const body = await c.req.json();
+  const body = validate(adminUpdateCustomerSchema, await c.req.json());
   const result = await customerService.updateCustomer(c.req.param('id'), body);
 
   await createAuditLog({

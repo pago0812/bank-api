@@ -3,7 +3,7 @@ import * as withdrawalService from '../../services/withdrawal.service.js';
 import { adminAuthMiddleware, requireRole } from '../../middleware/admin-auth.js';
 import { idempotencyMiddleware, saveIdempotencyRecord } from '../../lib/idempotency.js';
 import { createAuditLog } from '../../services/audit.service.js';
-import { AppError } from '../../lib/errors.js';
+import { validate, createWithdrawalSchema } from '../../lib/validation.js';
 import type { AppEnv } from '../../lib/types.js';
 
 const adminWithdrawals = new Hono<AppEnv>();
@@ -11,16 +11,8 @@ const adminWithdrawals = new Hono<AppEnv>();
 adminWithdrawals.use('*', adminAuthMiddleware);
 
 adminWithdrawals.post('/', requireRole('TELLER'), idempotencyMiddleware, async (c) => {
-  const body = c.get('parsedBody') || (await c.req.json());
-
-  const missing: { field: string; message: string }[] = [];
-  if (!body.accountId) missing.push({ field: 'accountId', message: 'Account ID is required' });
-  if (body.amount === undefined || body.amount === null) missing.push({ field: 'amount', message: 'Amount is required' });
-  if (!body.channel) missing.push({ field: 'channel', message: 'Channel is required' });
-
-  if (missing.length > 0) {
-    throw new AppError(422, 'VALIDATION_ERROR', 'Validation failed', missing);
-  }
+  const raw = c.get('parsedBody') || (await c.req.json());
+  const body = validate(createWithdrawalSchema, raw);
 
   const result = await withdrawalService.createWithdrawal(body);
 

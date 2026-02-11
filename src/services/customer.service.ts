@@ -129,9 +129,17 @@ export async function updateCustomer(
     }
   }
 
+  const updateData: Record<string, unknown> = {};
+  if (data.firstName !== undefined) updateData.firstName = data.firstName;
+  if (data.lastName !== undefined) updateData.lastName = data.lastName;
+  if (data.phone !== undefined) updateData.phone = data.phone;
+  if (data.address !== undefined) updateData.address = data.address;
+  if (data.zipCode !== undefined) updateData.zipCode = data.zipCode;
+  if (data.status !== undefined) updateData.status = data.status;
+
   return prisma.customer.update({
     where: { id },
-    data: data as any,
+    data: updateData,
     select: customerSelect,
   });
 }

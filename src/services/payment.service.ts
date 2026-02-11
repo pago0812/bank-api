@@ -25,7 +25,6 @@ export async function createPayment(data: {
 
   if (account.balance < data.amount) {
     throw new AppError(422, 'INSUFFICIENT_FUNDS', 'Insufficient balance for payment', {
-      available: account.balance,
       requested: data.amount,
     });
   }

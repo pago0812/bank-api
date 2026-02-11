@@ -36,8 +36,11 @@ const app = new Hono<AppEnv>();
 
 // Global middleware
 app.use('*', requestLogger);
+if (!process.env.CORS_ORIGIN) {
+  throw new Error('CORS_ORIGIN environment variable must be set (comma-separated origins)');
+}
 app.use('*', cors({
-  origin: process.env.CORS_ORIGIN?.split(',') || ['*'],
+  origin: process.env.CORS_ORIGIN.split(','),
   allowMethods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
   allowHeaders: ['Content-Type', 'Authorization', 'Idempotency-Key'],
   maxAge: 86400,

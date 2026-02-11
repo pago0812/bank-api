@@ -4,7 +4,7 @@ import { adminAuthMiddleware, requireRole } from '../../middleware/admin-auth.js
 import { idempotencyMiddleware, saveIdempotencyRecord } from '../../lib/idempotency.js';
 import { parsePagination, paginatedResponse } from '../../lib/pagination.js';
 import { createAuditLog } from '../../services/audit.service.js';
-import { AppError } from '../../lib/errors.js';
+import { validate, createCardSchema, updateCardSchema } from '../../lib/validation.js';
 import type { AppEnv } from '../../lib/types.js';
 
 const adminCards = new Hono<AppEnv>();
@@ -12,14 +12,8 @@ const adminCards = new Hono<AppEnv>();
 adminCards.use('*', adminAuthMiddleware);
 
 adminCards.post('/', requireRole('TELLER', 'MANAGER', 'ADMIN'), idempotencyMiddleware, async (c) => {
-  const body = c.get('parsedBody') || (await c.req.json());
-
-  if (!body.accountId || !body.type) {
-    throw new AppError(422, 'VALIDATION_ERROR', 'Validation failed', [
-      ...(!body.accountId ? [{ field: 'accountId', message: 'Account ID is required' }] : []),
-      ...(!body.type ? [{ field: 'type', message: 'Card type is required' }] : []),
-    ]);
-  }
+  const raw = c.get('parsedBody') || (await c.req.json());
+  const body = validate(createCardSchema, raw);
 
   const result = await cardService.createCard(body);
 
@@ -52,10 +46,7 @@ adminCards.get('/:id', async (c) => {
 });
 
 adminCards.patch('/:id', requireRole('MANAGER', 'ADMIN', 'CALL_CENTER_AGENT'), async (c) => {
-  const body = await c.req.json();
-  if (!body.status && body.dailyLimit === undefined) {
-    throw new AppError(422, 'VALIDATION_ERROR', 'At least one field (status or dailyLimit) is required');
-  }
+  const body = validate(updateCardSchema, await c.req.json());
   const result = await cardService.updateCard(c.req.param('id'), body);
 
   await createAuditLog({

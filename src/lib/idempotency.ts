@@ -47,20 +47,38 @@ export async function idempotencyMiddleware(c: Context<AppEnv>, next: Next) {
 
 let cleanupTimer: ReturnType<typeof setInterval> | null = null;
 
-export function startIdempotencyCleanup() {
-  cleanupTimer = setInterval(async () => {
-    try {
-      const cutoff = new Date(Date.now() - 24 * 60 * 60 * 1000);
-      const { count } = await prisma.idempotencyRecord.deleteMany({
-        where: { createdAt: { lt: cutoff } },
-      });
-      if (count > 0) {
-        console.log(JSON.stringify({ event: 'idempotency_cleanup', deleted: count }));
-      }
-    } catch (err) {
-      console.error('Idempotency cleanup error:', err);
+async function runCleanup() {
+  try {
+    const idempotencyCutoff = new Date(Date.now() - 24 * 60 * 60 * 1000);
+    const { count: idempotencyCount } = await prisma.idempotencyRecord.deleteMany({
+      where: { createdAt: { lt: idempotencyCutoff } },
+    });
+    if (idempotencyCount > 0) {
+      console.log(JSON.stringify({ event: 'idempotency_cleanup', deleted: idempotencyCount }));
     }
-  }, 60 * 60 * 1000); // every hour
+  } catch (err) {
+    console.error('Idempotency cleanup error:', err);
+  }
+
+  try {
+    const now = new Date();
+    const { count: customerTokens } = await prisma.refreshToken.deleteMany({
+      where: { expiresAt: { lt: now } },
+    });
+    const { count: employeeTokens } = await prisma.employeeRefreshToken.deleteMany({
+      where: { expiresAt: { lt: now } },
+    });
+    const totalTokens = customerTokens + employeeTokens;
+    if (totalTokens > 0) {
+      console.log(JSON.stringify({ event: 'refresh_token_cleanup', deleted: totalTokens }));
+    }
+  } catch (err) {
+    console.error('Refresh token cleanup error:', err);
+  }
+}
+
+export function startIdempotencyCleanup() {
+  cleanupTimer = setInterval(runCleanup, 60 * 60 * 1000); // every hour
   cleanupTimer.unref();
 }
 

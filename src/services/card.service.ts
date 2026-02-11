@@ -209,9 +209,13 @@ export async function updateCard(
     throw new AppError(422, 'VALIDATION_ERROR', 'Daily limit must be a positive integer');
   }
 
+  const updateData: Record<string, unknown> = {};
+  if (data.status !== undefined) updateData.status = data.status;
+  if (data.dailyLimit !== undefined) updateData.dailyLimit = data.dailyLimit;
+
   return prisma.card.update({
     where: { id },
-    data: data as any,
+    data: updateData,
     select: cardSelectPublic,
   });
 }

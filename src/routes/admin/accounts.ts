@@ -4,7 +4,7 @@ import { adminAuthMiddleware, requireRole } from '../../middleware/admin-auth.js
 import { idempotencyMiddleware, saveIdempotencyRecord } from '../../lib/idempotency.js';
 import { parsePagination, paginatedResponse } from '../../lib/pagination.js';
 import { createAuditLog } from '../../services/audit.service.js';
-import { AppError } from '../../lib/errors.js';
+import { validate, createAccountSchema, updateAccountSchema } from '../../lib/validation.js';
 import type { AppEnv } from '../../lib/types.js';
 
 const adminAccounts = new Hono<AppEnv>();
@@ -12,14 +12,8 @@ const adminAccounts = new Hono<AppEnv>();
 adminAccounts.use('*', adminAuthMiddleware);
 
 adminAccounts.post('/', requireRole('TELLER', 'MANAGER', 'ADMIN'), idempotencyMiddleware, async (c) => {
-  const body = c.get('parsedBody') || (await c.req.json());
-
-  if (!body.customerId || !body.type) {
-    throw new AppError(422, 'VALIDATION_ERROR', 'Validation failed', [
-      ...(!body.customerId ? [{ field: 'customerId', message: 'Customer ID is required' }] : []),
-      ...(!body.type ? [{ field: 'type', message: 'Account type is required' }] : []),
-    ]);
-  }
+  const raw = c.get('parsedBody') || (await c.req.json());
+  const body = validate(createAccountSchema, raw);
 
   const result = await accountService.createAccount(body);
 
@@ -54,12 +48,7 @@ adminAccounts.get('/:id', async (c) => {
 });
 
 adminAccounts.patch('/:id', requireRole('MANAGER', 'ADMIN'), async (c) => {
-  const body = await c.req.json();
-  if (!body.status) {
-    throw new AppError(422, 'VALIDATION_ERROR', 'Validation failed', [
-      { field: 'status', message: 'Status is required' },
-    ]);
-  }
+  const body = validate(updateAccountSchema, await c.req.json());
   const result = await accountService.updateAccount(c.req.param('id'), body);
 
   await createAuditLog({

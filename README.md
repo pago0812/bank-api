@@ -181,5 +181,69 @@ All errors follow this structure:
 
 All monetary amounts (balance, transaction amounts, card limits, etc.) are represented in **cents** (integer). For example, `250000` = $2,500.00.
 
-eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjdXN0XzAyIiwiaWF0IjoxNzcwNzg2OTMzLCJleHAiOjE3NzA3ODc4MzN9.FBBJH6LiMXZcDqrchbItVnbJJmGFov84zb51j-Ipy-g",
-"refreshToken": "a0d664e5-1450-4d29-b538-4f43133be854
+## Deployment (Coolify VPS)
+
+This API is designed to be deployed on a Coolify-managed VPS. Coolify handles Docker builds, reverse proxy (Traefik/Caddy), TLS termination, and environment variable management.
+
+### 1. Create a PostgreSQL Database
+
+In the Coolify dashboard, add a new **PostgreSQL** service (16+). Coolify provisions persistent storage automatically. Copy the internal connection URL — it will look like:
+
+```
+postgresql://postgres:<password>@<service-name>:5432/bank_api
+```
+
+### 2. Add the API Application
+
+Add a new application in Coolify and point it at your Git repository. Coolify auto-detects the `Dockerfile` — no build arguments or build packs needed.
+
+### 3. Set Environment Variables
+
+In the Coolify application settings, add these environment variables:
+
+| Variable | Required | Example | Description |
+|----------|----------|---------|-------------|
+| `DATABASE_URL` | Yes | `postgresql://postgres:pass@db:5432/bank_api` | PostgreSQL connection string |
+| `JWT_SECRET` | Yes | *(generate with `openssl rand -hex 32`)* | Secret for signing JWTs |
+| `CORS_ORIGIN` | Yes | `https://app.yourbank.com` | Comma-separated allowed origins |
+| `ADMIN_EMAIL` | Yes | `admin@yourbank.com` | Initial admin employee email |
+| `ADMIN_PASSWORD` | Yes | *(strong password)* | Initial admin employee password |
+| `PORT` | No | `3000` | Server port (default: `3000`, matches Dockerfile) |
+
+### 4. Configure Health Check
+
+Set the health check in Coolify to:
+
+- **Path:** `/health`
+- **Port:** `3000`
+
+The endpoint returns `{ "status": "ok", "database": "connected" }` when healthy, or HTTP 503 when the database is unreachable.
+
+### 5. Deploy
+
+Push to your configured branch. Coolify will:
+
+1. Build the Docker image (multi-stage: deps → build → production)
+2. Run `prisma migrate deploy` on container start (applies pending migrations)
+3. Start the Node.js server on port 3000
+4. Seed the initial admin employee from `ADMIN_EMAIL`/`ADMIN_PASSWORD` (if not already created)
+
+### 6. Verify
+
+```bash
+# Health check
+curl https://your-api-domain.com/health
+
+# Admin login
+curl -X POST https://your-api-domain.com/api/v1/admin/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"email":"admin@yourbank.com","password":"your-admin-password"}'
+```
+
+### How It Works
+
+- **TLS:** Coolify's reverse proxy handles HTTPS termination. The API detects `x-forwarded-proto: https` and sets HSTS headers automatically.
+- **Migrations:** Run automatically on every container start via `prisma migrate deploy` in the Dockerfile CMD. No manual migration step needed.
+- **Persistent storage:** Not required for the API container (stateless). PostgreSQL storage is managed by Coolify.
+- **Scaling:** The API is stateless and can be scaled horizontally. Note that rate limiting is in-memory, so each instance has its own counters — consider Redis-backed rate limiting if running multiple instances.
+- **Cleanup jobs:** Expired idempotency records and refresh tokens are automatically cleaned up every hour.

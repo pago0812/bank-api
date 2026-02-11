@@ -26,14 +26,14 @@ export async function createWithdrawal(data: {
 
   if (account.balance < data.amount) {
     throw new AppError(422, 'INSUFFICIENT_FUNDS', 'Insufficient balance for withdrawal', {
-      available: account.balance,
       requested: data.amount,
     });
   }
 
-  // ATM channel: check card daily limit
+  // ATM channel: validate card status before transaction
+  let debitCard: typeof account.cards[number] | undefined;
   if (data.channel === 'ATM') {
-    const debitCard = account.cards.find(
+    debitCard = account.cards.find(
       (c) => c.type === 'DEBIT' && c.status === 'ACTIVE',
     );
 
@@ -43,7 +43,6 @@ export async function createWithdrawal(data: {
         (c) => c.type === 'DEBIT' && (c.status === 'ACTIVE' || c.status === 'BLOCKED'),
       );
       if (expiredDebit) {
-        // Check if actually expired by date
         const [month, year] = expiredDebit.expiryDate.split('/').map(Number);
         const expiryEnd = new Date(2000 + year, month, 0);
         if (expiryEnd < new Date()) {
@@ -61,28 +60,30 @@ export async function createWithdrawal(data: {
       await prisma.card.update({ where: { id: debitCard.id }, data: { status: 'EXPIRED' } });
       throw new AppError(422, 'CARD_NOT_ACTIVE', 'Card has expired');
     }
-
-    // Sum today's ATM withdrawals
-    const todayStart = new Date();
-    todayStart.setUTCHours(0, 0, 0, 0);
-
-    const todayWithdrawals = await prisma.withdrawal.aggregate({
-      where: {
-        accountId: data.accountId,
-        channel: 'ATM',
-        status: 'COMPLETED',
-        createdAt: { gte: todayStart },
-      },
-      _sum: { amount: true },
-    });
-
-    const todayTotal = (todayWithdrawals._sum.amount || 0) + data.amount;
-    if (todayTotal > debitCard.dailyLimit) {
-      throw new AppError(422, 'DAILY_LIMIT_EXCEEDED', 'Card daily limit would be exceeded');
-    }
   }
 
   const result = await prisma.$transaction(async (tx) => {
+    // ATM daily limit check inside transaction to prevent race conditions
+    if (data.channel === 'ATM' && debitCard) {
+      const todayStart = new Date();
+      todayStart.setUTCHours(0, 0, 0, 0);
+
+      const todayWithdrawals = await tx.withdrawal.aggregate({
+        where: {
+          accountId: data.accountId,
+          channel: 'ATM',
+          status: 'COMPLETED',
+          createdAt: { gte: todayStart },
+        },
+        _sum: { amount: true },
+      });
+
+      const todayTotal = (todayWithdrawals._sum.amount || 0) + data.amount;
+      if (todayTotal > debitCard.dailyLimit) {
+        throw new AppError(422, 'DAILY_LIMIT_EXCEEDED', 'Card daily limit would be exceeded');
+      }
+    }
+
     const updatedAccount = await tx.account.update({
       where: { id: data.accountId },
       data: { balance: { decrement: data.amount } },

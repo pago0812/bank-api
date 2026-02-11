@@ -42,7 +42,6 @@ export async function createTransfer(data: {
 
   if (fromAccount.balance < data.amount) {
     throw new AppError(422, 'INSUFFICIENT_FUNDS', 'Insufficient balance in source account', {
-      available: fromAccount.balance,
       requested: data.amount,
     });
   }
