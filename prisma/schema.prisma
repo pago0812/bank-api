@@ -97,7 +97,6 @@ model Customer {
   address     String         // full address string
   zipCode     String
   status      CustomerStatus @default(ACTIVE)
-  kycVerified Boolean        @default(false)
   createdAt   DateTime       @default(now())
   updatedAt   DateTime       @updatedAt
 
@@ -126,6 +125,8 @@ model Account {
   transfersFrom Transfer[] @relation("TransferFrom")
   transfersTo   Transfer[] @relation("TransferTo")
   payments      Payment[]
+
+  @@index([customerId])
 }
 
 model Transaction {
@@ -142,6 +143,9 @@ model Transaction {
   createdAt         DateTime          @default(now())
 
   account Account @relation(fields: [accountId], references: [id])
+
+  @@index([accountId])
+  @@index([createdAt])
 }
 
 model Transfer {
@@ -156,6 +160,9 @@ model Transfer {
 
   fromAccount Account @relation("TransferFrom", fields: [fromAccountId], references: [id])
   toAccount   Account @relation("TransferTo", fields: [toAccountId], references: [id])
+
+  @@index([fromAccountId])
+  @@index([toAccountId])
 }
 
 model Payment {
@@ -171,6 +178,8 @@ model Payment {
   createdAt          DateTime      @default(now())
 
   account Account @relation(fields: [accountId], references: [id])
+
+  @@index([accountId])
 }
 
 model Card {
@@ -187,6 +196,8 @@ model Card {
   updatedAt    DateTime   @updatedAt
 
   account Account @relation(fields: [accountId], references: [id])
+
+  @@index([accountId])
 }
 
 model Deposit {
@@ -199,6 +210,8 @@ model Deposit {
   createdAt DateTime      @default(now())
 
   account Account @relation(fields: [accountId], references: [id])
+
+  @@index([accountId])
 }
 
 model Withdrawal {
@@ -211,6 +224,8 @@ model Withdrawal {
   createdAt DateTime         @default(now())
 
   account Account @relation(fields: [accountId], references: [id])
+
+  @@index([accountId])
 }
 
 model VerificationSession {
@@ -225,6 +240,8 @@ model VerificationSession {
   expiresAt      DateTime                  // createdAt + 10 minutes
 
   customer Customer? @relation(fields: [customerId], references: [id])
+
+  @@index([customerId])
 }
 
 model RefreshToken {
@@ -235,6 +252,8 @@ model RefreshToken {
   createdAt  DateTime @default(now())
 
   customer Customer @relation(fields: [customerId], references: [id])
+
+  @@index([customerId])
 }
 
 model Employee {
@@ -261,6 +280,8 @@ model EmployeeRefreshToken {
   createdAt  DateTime @default(now())
 
   employee Employee @relation(fields: [employeeId], references: [id])
+
+  @@index([employeeId])
 }
 
 model AuditLog {
@@ -286,4 +307,6 @@ model IdempotencyRecord {
   response  Json     // stored response
   status    Int      // HTTP status code
   createdAt DateTime @default(now())
+
+  @@index([createdAt])
 }

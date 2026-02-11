@@ -38,8 +38,15 @@ COPY --from=build /app/node_modules/dotenv ./node_modules/dotenv
 # Copy built application
 COPY --from=build /app/dist ./dist
 
+RUN addgroup -g 1001 -S appgroup && \
+    adduser -S appuser -u 1001 -G appgroup
+USER appuser
+
 ENV PORT=3000
 EXPOSE 3000
+
+HEALTHCHECK --interval=30s --timeout=5s --start-period=15s --retries=3 \
+  CMD wget --no-verbose --tries=1 --spider http://localhost:3000/health || exit 1
 
 # Run migrations and start server
 CMD ["sh", "-c", "npx prisma migrate deploy && node dist/index.js"]

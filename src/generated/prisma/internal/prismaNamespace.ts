@@ -1503,7 +1503,6 @@ export const CustomerScalarFieldEnum = {
   address: 'address',
   zipCode: 'zipCode',
   status: 'status',
-  kycVerified: 'kycVerified',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -1783,13 +1782,6 @@ export type ListEnumCustomerStatusFieldRefInput<$PrismaModel> = FieldRefInputTyp
 
 
 /**
- * Reference to a field of type 'Boolean'
- */
-export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
-    
-
-
-/**
  * Reference to a field of type 'AccountType'
  */
 export type EnumAccountTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AccountType'>
@@ -1996,6 +1988,13 @@ export type EnumEmployeeRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$Pri
  * Reference to a field of type 'EmployeeRole[]'
  */
 export type ListEnumEmployeeRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'EmployeeRole[]'>
+    
+
+
+/**
+ * Reference to a field of type 'Boolean'
+ */
+export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
     
 
 /**

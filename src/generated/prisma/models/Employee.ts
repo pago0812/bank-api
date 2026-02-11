@@ -438,6 +438,10 @@ export type EnumEmployeeRoleFieldUpdateOperationsInput = {
   set?: $Enums.EmployeeRole
 }
 
+export type BoolFieldUpdateOperationsInput = {
+  set?: boolean
+}
+
 export type EmployeeCreateNestedOneWithoutRefreshTokensInput = {
   create?: Prisma.XOR<Prisma.EmployeeCreateWithoutRefreshTokensInput, Prisma.EmployeeUncheckedCreateWithoutRefreshTokensInput>
   connectOrCreate?: Prisma.EmployeeCreateOrConnectWithoutRefreshTokensInput

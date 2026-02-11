@@ -12,7 +12,6 @@ const customerSelect = {
   address: true,
   zipCode: true,
   status: true,
-  kycVerified: true,
   createdAt: true,
   updatedAt: true,
 };
@@ -116,7 +115,6 @@ export async function updateCustomer(
     address?: string;
     zipCode?: string;
     status?: string;
-    kycVerified?: boolean;
   },
 ) {
   const customer = await prisma.customer.findUnique({ where: { id } });

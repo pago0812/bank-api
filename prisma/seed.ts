@@ -11,6 +11,11 @@ function hashCardNumber(cardNumber: string): string {
 }
 
 async function main() {
+  if (process.env.NODE_ENV === 'production') {
+    console.error('Seed script cannot run in production.');
+    process.exit(1);
+  }
+
   console.log('Seeding database...');
 
   // Clean existing data
@@ -47,7 +52,6 @@ async function main() {
       address: '123 Main St, New York, NY',
       zipCode: '10001',
       status: 'ACTIVE',
-      kycVerified: true,
     },
   });
 
@@ -63,7 +67,6 @@ async function main() {
       address: '456 Oak Ave, Los Angeles, CA',
       zipCode: '90001',
       status: 'ACTIVE',
-      kycVerified: true,
     },
   });
 
@@ -79,7 +82,6 @@ async function main() {
       address: '789 Pine Rd, Chicago, IL',
       zipCode: '60601',
       status: 'ACTIVE',
-      kycVerified: false,
     },
   });
 

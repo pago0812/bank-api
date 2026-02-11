@@ -45,11 +45,13 @@ export async function listAccounts(params: {
   customerId?: string;
   type?: string;
   status?: string;
+  search?: string;
 }) {
   const where: any = {};
   if (params.customerId) where.customerId = params.customerId;
   if (params.type) where.type = params.type;
   if (params.status) where.status = params.status;
+  if (params.search) where.accountNumber = { startsWith: params.search };
 
   const [data, total] = await Promise.all([
     prisma.account.findMany({
@@ -57,6 +59,11 @@ export async function listAccounts(params: {
       skip: params.skip,
       take: params.limit,
       orderBy: { createdAt: 'desc' },
+      include: {
+        customer: {
+          select: { firstName: true, lastName: true },
+        },
+      },
     }),
     prisma.account.count({ where }),
   ]);

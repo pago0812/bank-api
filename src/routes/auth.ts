@@ -1,12 +1,13 @@
 import { Hono } from 'hono';
 import * as authService from '../services/auth.service.js';
 import { authMiddleware } from '../middleware/auth.js';
+import { rateLimiter } from '../middleware/rate-limit.js';
 import { AppError } from '../lib/errors.js';
 import type { AppEnv } from '../lib/types.js';
 
 const auth = new Hono<AppEnv>();
 
-auth.post('/login', async (c) => {
+auth.post('/login', rateLimiter(), async (c) => {
   const body = await c.req.json();
   if (!body.email || !body.password) {
     throw new AppError(422, 'VALIDATION_ERROR', 'Validation failed', [
@@ -18,7 +19,7 @@ auth.post('/login', async (c) => {
   return c.json(result);
 });
 
-auth.post('/refresh', async (c) => {
+auth.post('/refresh', rateLimiter(), async (c) => {
   const body = await c.req.json();
   if (!body.refreshToken) {
     throw new AppError(422, 'VALIDATION_ERROR', 'Validation failed', [

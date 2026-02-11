@@ -94,7 +94,6 @@ export const CustomerScalarFieldEnum = {
   address: 'address',
   zipCode: 'zipCode',
   status: 'status',
-  kycVerified: 'kycVerified',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const

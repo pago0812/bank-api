@@ -45,6 +45,32 @@ export async function idempotencyMiddleware(c: Context<AppEnv>, next: Next) {
   await next();
 }
 
+let cleanupTimer: ReturnType<typeof setInterval> | null = null;
+
+export function startIdempotencyCleanup() {
+  cleanupTimer = setInterval(async () => {
+    try {
+      const cutoff = new Date(Date.now() - 24 * 60 * 60 * 1000);
+      const { count } = await prisma.idempotencyRecord.deleteMany({
+        where: { createdAt: { lt: cutoff } },
+      });
+      if (count > 0) {
+        console.log(JSON.stringify({ event: 'idempotency_cleanup', deleted: count }));
+      }
+    } catch (err) {
+      console.error('Idempotency cleanup error:', err);
+    }
+  }, 60 * 60 * 1000); // every hour
+  cleanupTimer.unref();
+}
+
+export function stopIdempotencyCleanup() {
+  if (cleanupTimer) {
+    clearInterval(cleanupTimer);
+    cleanupTimer = null;
+  }
+}
+
 export async function saveIdempotencyRecord(
   c: Context<AppEnv>,
   responseBody: unknown,

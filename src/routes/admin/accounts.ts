@@ -43,6 +43,7 @@ adminAccounts.get('/', async (c) => {
     customerId: query.customerId,
     type: query.type,
     status: query.status,
+    search: query.search,
   });
   return c.json(paginatedResponse(data, total, page, limit));
 });

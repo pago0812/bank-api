@@ -35,7 +35,6 @@ export type CustomerMinAggregateOutputType = {
   address: string | null
   zipCode: string | null
   status: $Enums.CustomerStatus | null
-  kycVerified: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -51,7 +50,6 @@ export type CustomerMaxAggregateOutputType = {
   address: string | null
   zipCode: string | null
   status: $Enums.CustomerStatus | null
-  kycVerified: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -67,7 +65,6 @@ export type CustomerCountAggregateOutputType = {
   address: number
   zipCode: number
   status: number
-  kycVerified: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -85,7 +82,6 @@ export type CustomerMinAggregateInputType = {
   address?: true
   zipCode?: true
   status?: true
-  kycVerified?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -101,7 +97,6 @@ export type CustomerMaxAggregateInputType = {
   address?: true
   zipCode?: true
   status?: true
-  kycVerified?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -117,7 +112,6 @@ export type CustomerCountAggregateInputType = {
   address?: true
   zipCode?: true
   status?: true
-  kycVerified?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -206,7 +200,6 @@ export type CustomerGroupByOutputType = {
   address: string
   zipCode: string
   status: $Enums.CustomerStatus
-  kycVerified: boolean
   createdAt: Date
   updatedAt: Date
   _count: CustomerCountAggregateOutputType | null
@@ -243,7 +236,6 @@ export type CustomerWhereInput = {
   address?: Prisma.StringFilter<"Customer"> | string
   zipCode?: Prisma.StringFilter<"Customer"> | string
   status?: Prisma.EnumCustomerStatusFilter<"Customer"> | $Enums.CustomerStatus
-  kycVerified?: Prisma.BoolFilter<"Customer"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Customer"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Customer"> | Date | string
   accounts?: Prisma.AccountListRelationFilter
@@ -262,7 +254,6 @@ export type CustomerOrderByWithRelationInput = {
   address?: Prisma.SortOrder
   zipCode?: Prisma.SortOrder
   status?: Prisma.SortOrder
-  kycVerified?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   accounts?: Prisma.AccountOrderByRelationAggregateInput
@@ -284,7 +275,6 @@ export type CustomerWhereUniqueInput = Prisma.AtLeast<{
   address?: Prisma.StringFilter<"Customer"> | string
   zipCode?: Prisma.StringFilter<"Customer"> | string
   status?: Prisma.EnumCustomerStatusFilter<"Customer"> | $Enums.CustomerStatus
-  kycVerified?: Prisma.BoolFilter<"Customer"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Customer"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Customer"> | Date | string
   accounts?: Prisma.AccountListRelationFilter
@@ -303,7 +293,6 @@ export type CustomerOrderByWithAggregationInput = {
   address?: Prisma.SortOrder
   zipCode?: Prisma.SortOrder
   status?: Prisma.SortOrder
-  kycVerified?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.CustomerCountOrderByAggregateInput
@@ -325,7 +314,6 @@ export type CustomerScalarWhereWithAggregatesInput = {
   address?: Prisma.StringWithAggregatesFilter<"Customer"> | string
   zipCode?: Prisma.StringWithAggregatesFilter<"Customer"> | string
   status?: Prisma.EnumCustomerStatusWithAggregatesFilter<"Customer"> | $Enums.CustomerStatus
-  kycVerified?: Prisma.BoolWithAggregatesFilter<"Customer"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Customer"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Customer"> | Date | string
 }
@@ -341,7 +329,6 @@ export type CustomerCreateInput = {
   address: string
   zipCode: string
   status?: $Enums.CustomerStatus
-  kycVerified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   accounts?: Prisma.AccountCreateNestedManyWithoutCustomerInput
@@ -360,7 +347,6 @@ export type CustomerUncheckedCreateInput = {
   address: string
   zipCode: string
   status?: $Enums.CustomerStatus
-  kycVerified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutCustomerInput
@@ -379,7 +365,6 @@ export type CustomerUpdateInput = {
   address?: Prisma.StringFieldUpdateOperationsInput | string
   zipCode?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumCustomerStatusFieldUpdateOperationsInput | $Enums.CustomerStatus
-  kycVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   accounts?: Prisma.AccountUpdateManyWithoutCustomerNestedInput
@@ -398,7 +383,6 @@ export type CustomerUncheckedUpdateInput = {
   address?: Prisma.StringFieldUpdateOperationsInput | string
   zipCode?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumCustomerStatusFieldUpdateOperationsInput | $Enums.CustomerStatus
-  kycVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutCustomerNestedInput
@@ -417,7 +401,6 @@ export type CustomerCreateManyInput = {
   address: string
   zipCode: string
   status?: $Enums.CustomerStatus
-  kycVerified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -433,7 +416,6 @@ export type CustomerUpdateManyMutationInput = {
   address?: Prisma.StringFieldUpdateOperationsInput | string
   zipCode?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumCustomerStatusFieldUpdateOperationsInput | $Enums.CustomerStatus
-  kycVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -449,7 +431,6 @@ export type CustomerUncheckedUpdateManyInput = {
   address?: Prisma.StringFieldUpdateOperationsInput | string
   zipCode?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumCustomerStatusFieldUpdateOperationsInput | $Enums.CustomerStatus
-  kycVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -465,7 +446,6 @@ export type CustomerCountOrderByAggregateInput = {
   address?: Prisma.SortOrder
   zipCode?: Prisma.SortOrder
   status?: Prisma.SortOrder
-  kycVerified?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -481,7 +461,6 @@ export type CustomerMaxOrderByAggregateInput = {
   address?: Prisma.SortOrder
   zipCode?: Prisma.SortOrder
   status?: Prisma.SortOrder
-  kycVerified?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -497,7 +476,6 @@ export type CustomerMinOrderByAggregateInput = {
   address?: Prisma.SortOrder
   zipCode?: Prisma.SortOrder
   status?: Prisma.SortOrder
-  kycVerified?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -522,10 +500,6 @@ export type DateTimeFieldUpdateOperationsInput = {
 
 export type EnumCustomerStatusFieldUpdateOperationsInput = {
   set?: $Enums.CustomerStatus
-}
-
-export type BoolFieldUpdateOperationsInput = {
-  set?: boolean
 }
 
 export type CustomerCreateNestedOneWithoutAccountsInput = {
@@ -583,7 +557,6 @@ export type CustomerCreateWithoutAccountsInput = {
   address: string
   zipCode: string
   status?: $Enums.CustomerStatus
-  kycVerified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutCustomerInput
@@ -601,7 +574,6 @@ export type CustomerUncheckedCreateWithoutAccountsInput = {
   address: string
   zipCode: string
   status?: $Enums.CustomerStatus
-  kycVerified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutCustomerInput
@@ -635,7 +607,6 @@ export type CustomerUpdateWithoutAccountsInput = {
   address?: Prisma.StringFieldUpdateOperationsInput | string
   zipCode?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumCustomerStatusFieldUpdateOperationsInput | $Enums.CustomerStatus
-  kycVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutCustomerNestedInput
@@ -653,7 +624,6 @@ export type CustomerUncheckedUpdateWithoutAccountsInput = {
   address?: Prisma.StringFieldUpdateOperationsInput | string
   zipCode?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumCustomerStatusFieldUpdateOperationsInput | $Enums.CustomerStatus
-  kycVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutCustomerNestedInput
@@ -671,7 +641,6 @@ export type CustomerCreateWithoutVerificationSessionsInput = {
   address: string
   zipCode: string
   status?: $Enums.CustomerStatus
-  kycVerified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   accounts?: Prisma.AccountCreateNestedManyWithoutCustomerInput
@@ -689,7 +658,6 @@ export type CustomerUncheckedCreateWithoutVerificationSessionsInput = {
   address: string
   zipCode: string
   status?: $Enums.CustomerStatus
-  kycVerified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutCustomerInput
@@ -723,7 +691,6 @@ export type CustomerUpdateWithoutVerificationSessionsInput = {
   address?: Prisma.StringFieldUpdateOperationsInput | string
   zipCode?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumCustomerStatusFieldUpdateOperationsInput | $Enums.CustomerStatus
-  kycVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   accounts?: Prisma.AccountUpdateManyWithoutCustomerNestedInput
@@ -741,7 +708,6 @@ export type CustomerUncheckedUpdateWithoutVerificationSessionsInput = {
   address?: Prisma.StringFieldUpdateOperationsInput | string
   zipCode?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumCustomerStatusFieldUpdateOperationsInput | $Enums.CustomerStatus
-  kycVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutCustomerNestedInput
@@ -759,7 +725,6 @@ export type CustomerCreateWithoutRefreshTokensInput = {
   address: string
   zipCode: string
   status?: $Enums.CustomerStatus
-  kycVerified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   accounts?: Prisma.AccountCreateNestedManyWithoutCustomerInput
@@ -777,7 +742,6 @@ export type CustomerUncheckedCreateWithoutRefreshTokensInput = {
   address: string
   zipCode: string
   status?: $Enums.CustomerStatus
-  kycVerified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutCustomerInput
@@ -811,7 +775,6 @@ export type CustomerUpdateWithoutRefreshTokensInput = {
   address?: Prisma.StringFieldUpdateOperationsInput | string
   zipCode?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumCustomerStatusFieldUpdateOperationsInput | $Enums.CustomerStatus
-  kycVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   accounts?: Prisma.AccountUpdateManyWithoutCustomerNestedInput
@@ -829,7 +792,6 @@ export type CustomerUncheckedUpdateWithoutRefreshTokensInput = {
   address?: Prisma.StringFieldUpdateOperationsInput | string
   zipCode?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumCustomerStatusFieldUpdateOperationsInput | $Enums.CustomerStatus
-  kycVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutCustomerNestedInput
@@ -896,7 +858,6 @@ export type CustomerSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   address?: boolean
   zipCode?: boolean
   status?: boolean
-  kycVerified?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   accounts?: boolean | Prisma.Customer$accountsArgs<ExtArgs>
@@ -916,7 +877,6 @@ export type CustomerSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
   address?: boolean
   zipCode?: boolean
   status?: boolean
-  kycVerified?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["customer"]>
@@ -932,7 +892,6 @@ export type CustomerSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
   address?: boolean
   zipCode?: boolean
   status?: boolean
-  kycVerified?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["customer"]>
@@ -948,12 +907,11 @@ export type CustomerSelectScalar = {
   address?: boolean
   zipCode?: boolean
   status?: boolean
-  kycVerified?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type CustomerOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "password" | "firstName" | "lastName" | "dateOfBirth" | "phone" | "address" | "zipCode" | "status" | "kycVerified" | "createdAt" | "updatedAt", ExtArgs["result"]["customer"]>
+export type CustomerOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "password" | "firstName" | "lastName" | "dateOfBirth" | "phone" | "address" | "zipCode" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["customer"]>
 export type CustomerInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   accounts?: boolean | Prisma.Customer$accountsArgs<ExtArgs>
   refreshTokens?: boolean | Prisma.Customer$refreshTokensArgs<ExtArgs>
@@ -981,7 +939,6 @@ export type $CustomerPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     address: string
     zipCode: string
     status: $Enums.CustomerStatus
-    kycVerified: boolean
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["customer"]>
@@ -1420,7 +1377,6 @@ export interface CustomerFieldRefs {
   readonly address: Prisma.FieldRef<"Customer", 'String'>
   readonly zipCode: Prisma.FieldRef<"Customer", 'String'>
   readonly status: Prisma.FieldRef<"Customer", 'CustomerStatus'>
-  readonly kycVerified: Prisma.FieldRef<"Customer", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"Customer", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Customer", 'DateTime'>
 }
