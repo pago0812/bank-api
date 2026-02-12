@@ -5,7 +5,7 @@
 This specification defines the **admin operations** for the bank simulation API. It introduces an employee/bank-worker access model alongside the existing customer access, reflecting how a traditional retail bank operates:
 
 - **Customers** interact via mobile/web app — they can view their data, make transfers, and pay bills.
-- **Bank employees** (tellers, managers, admins, call-center agents) perform privileged operations — opening accounts, issuing cards, processing deposits, freezing accounts, and verifying identity.
+- **Bank employees** (tellers, admins, call-center agents) perform privileged operations — opening accounts, issuing cards, processing deposits, freezing accounts, and verifying identity.
 
 This document covers the new Employee model, admin authentication, role-based access control, audit logging, and all admin-only endpoints.
 
@@ -28,7 +28,6 @@ This spec **extends** the main `SPECIFICATION.md`. The conventions defined there
 | Role                 | Description                                              |
 |----------------------|----------------------------------------------------------|
 | `ADMIN`              | Full access to all operations. Can manage employees.     |
-| `MANAGER`            | Can manage customers, accounts, cards. Cannot create employees. |
 | `TELLER`             | Can create customers, open accounts, issue cards, process deposits and withdrawals. |
 | `CALL_CENTER_AGENT`  | Can verify identity (KBA), view customer data, block/unblock cards. |
 
@@ -87,7 +86,6 @@ Every mutating admin operation creates an `AuditLog` record with:
 ```prisma
 enum EmployeeRole {
   TELLER
-  MANAGER
   ADMIN
   CALL_CENTER_AGENT
 }
@@ -332,7 +330,7 @@ Start an identity verification session by phone number. Used by call-center agen
 
 **Auth**: Employee Bearer token
 
-**Allowed Roles**: `CALL_CENTER_AGENT`, `MANAGER`, `ADMIN`
+**Allowed Roles**: `CALL_CENTER_AGENT`, `ADMIN`
 
 **Request Body**:
 
@@ -385,7 +383,7 @@ Submit an answer to the current verification question.
 
 **Auth**: Employee Bearer token
 
-**Allowed Roles**: `CALL_CENTER_AGENT`, `MANAGER`, `ADMIN`
+**Allowed Roles**: `CALL_CENTER_AGENT`, `ADMIN`
 
 **Request Body**:
 
@@ -438,7 +436,7 @@ Create a new customer.
 
 **Auth**: Employee Bearer token
 
-**Allowed Roles**: `TELLER`, `MANAGER`, `ADMIN`
+**Allowed Roles**: `TELLER`, `ADMIN`
 
 **Request Headers**:
 
@@ -616,7 +614,7 @@ Update a customer's details. Admins can update all fields including status and K
 
 **Auth**: Employee Bearer token
 
-**Allowed Roles**: `MANAGER`, `ADMIN`
+**Allowed Roles**: `ADMIN`
 
 **Path Params**:
 
@@ -677,7 +675,7 @@ Delete a customer. Sets status to CLOSED (soft delete).
 
 **Auth**: Employee Bearer token
 
-**Allowed Roles**: `MANAGER`, `ADMIN`
+**Allowed Roles**: `ADMIN`
 
 **Path Params**:
 
@@ -710,7 +708,7 @@ Create a new account for a customer.
 
 **Auth**: Employee Bearer token
 
-**Allowed Roles**: `TELLER`, `MANAGER`, `ADMIN`
+**Allowed Roles**: `TELLER`, `ADMIN`
 
 **Request Headers**:
 
@@ -848,7 +846,7 @@ Update account status.
 
 **Auth**: Employee Bearer token
 
-**Allowed Roles**: `MANAGER`, `ADMIN`
+**Allowed Roles**: `ADMIN`
 
 **Path Params**:
 
@@ -903,7 +901,7 @@ Issue a new card for an account.
 
 **Auth**: Employee Bearer token
 
-**Allowed Roles**: `TELLER`, `MANAGER`, `ADMIN`
+**Allowed Roles**: `TELLER`, `ADMIN`
 
 **Request Headers**:
 
@@ -1050,7 +1048,7 @@ Update card status or daily limit.
 
 **Auth**: Employee Bearer token
 
-**Allowed Roles**: `MANAGER`, `ADMIN`, `CALL_CENTER_AGENT`
+**Allowed Roles**: `ADMIN`, `CALL_CENTER_AGENT`
 
 **Path Params**:
 
@@ -1103,7 +1101,7 @@ Cancel a card (soft delete).
 
 **Auth**: Employee Bearer token
 
-**Allowed Roles**: `MANAGER`, `ADMIN`
+**Allowed Roles**: `ADMIN`
 
 **Path Params**:
 
@@ -1135,7 +1133,7 @@ Create a deposit into an account. This is the only way to credit money to an acc
 
 **Auth**: Employee Bearer token
 
-**Allowed Roles**: `TELLER`, `MANAGER`, `ADMIN`
+**Allowed Roles**: `TELLER`, `ADMIN`
 
 **Request Headers**:
 
@@ -1489,110 +1487,29 @@ Get a transfer by ID.
 
 ---
 
-### 5.10 Payments (Admin View)
-
-#### `GET /api/v1/admin/payments`
-
-List all payments with filters and pagination.
-
-**Auth**: Employee Bearer token
-
-**Allowed Roles**: All
-
-**Query Params**:
-
-| Param       | Type     | Default | Description                                  |
-|-------------|----------|---------|----------------------------------------------|
-| `page`      | `number` | `1`     | Page number                                  |
-| `limit`     | `number` | `20`    | Items per page (max 100)                     |
-| `accountId` | `string` | —       | Filter by account ID                         |
-| `status`    | `string` | —       | Filter by `PENDING`, `COMPLETED`, `FAILED`  |
-
-**Response `200 OK`**:
-
-```json
-{
-  "data": [
-    {
-      "id": "pmt_01",
-      "accountId": "acc_01",
-      "amount": 75000,
-      "beneficiaryName": "Electric Company",
-      "beneficiaryBank": "National Bank",
-      "beneficiaryAccount": "9876543210",
-      "reference": "ref_pmt_01",
-      "description": "January electricity bill",
-      "status": "COMPLETED",
-      "createdAt": "2025-01-15T10:30:00.000Z"
-    }
-  ],
-  "meta": {
-    "total": 5,
-    "page": 1,
-    "limit": 20,
-    "totalPages": 1
-  }
-}
-```
-
----
-
-#### `GET /api/v1/admin/payments/:id`
-
-Get a payment by ID.
-
-**Auth**: Employee Bearer token
-
-**Allowed Roles**: All
-
-**Path Params**:
-
-| Param | Type     | Description |
-|-------|----------|-------------|
-| `id`  | `string` | Payment ID  |
-
-**Response `200 OK`**:
-
-```json
-{
-  "id": "pmt_01",
-  "accountId": "acc_01",
-  "amount": 75000,
-  "beneficiaryName": "Electric Company",
-  "beneficiaryBank": "National Bank",
-  "beneficiaryAccount": "9876543210",
-  "reference": "ref_pmt_01",
-  "description": "January electricity bill",
-  "status": "COMPLETED",
-  "createdAt": "2025-01-15T10:30:00.000Z"
-}
-```
-
----
-
 ## 6. Role Permissions Matrix
 
 ### Write Operations
 
-| Operation                | TELLER | MANAGER | ADMIN | CALL_CENTER_AGENT |
-|--------------------------|--------|---------|-------|--------------------|
-| Create customer          | Yes    | Yes     | Yes   | No                 |
-| Update customer          | No     | Yes     | Yes   | No                 |
-| Delete customer          | No     | Yes     | Yes   | No                 |
-| Create account           | Yes    | Yes     | Yes   | No                 |
-| Freeze/close account     | No     | Yes     | Yes   | No                 |
-| Issue card               | Yes    | Yes     | Yes   | No                 |
-| Block/unblock card       | No     | Yes     | Yes   | Yes                |
-| Cancel card              | No     | Yes     | Yes   | No                 |
-| Update card daily limit  | No     | Yes     | Yes   | Yes                |
-| Create deposit           | Yes    | Yes     | Yes   | No                 |
-| Create withdrawal        | Yes    | No      | No    | No                 |
-| Start KBA verification   | No     | Yes     | Yes   | Yes                |
-| Answer KBA question      | No     | Yes     | Yes   | Yes                |
+| Operation                | TELLER | ADMIN | CALL_CENTER_AGENT |
+|--------------------------|--------|-------|--------------------|
+| Create customer          | Yes    | Yes   | No                 |
+| Update customer          | No     | Yes   | No                 |
+| Delete customer          | No     | Yes   | No                 |
+| Create account           | Yes    | Yes   | No                 |
+| Freeze/close account     | No     | Yes   | No                 |
+| Issue card               | Yes    | Yes   | No                 |
+| Block/unblock card       | No     | Yes   | Yes                |
+| Cancel card              | No     | Yes   | No                 |
+| Update card daily limit  | No     | Yes   | Yes                |
+| Create deposit           | Yes    | Yes   | No                 |
+| Create withdrawal        | Yes    | No    | No                 |
+| Start KBA verification   | No     | Yes   | Yes                |
+| Answer KBA question      | No     | Yes   | Yes                |
 
 ### Read Operations
 
-All employees can read all data (customers, accounts, cards, transactions, transfers, payments, deposits, withdrawals).
+All employees can read all data (customers, accounts, cards, transactions, transfers, deposits, withdrawals).
 
 ---
 
@@ -1623,9 +1540,8 @@ All employees can read all data (customers, accounts, cards, transactions, trans
 | ID       | Employee ID | Email              | Password (plain) | First Name | Last Name | Role               | Active |
 |----------|-------------|--------------------|-------------------|------------|-----------|---------------------|--------|
 | `emp_01` | EMP-001     | admin@bank.com     | admin123          | Alice      | Admin     | ADMIN               | true   |
-| `emp_02` | EMP-002     | manager@bank.com   | manager123        | Mark       | Manager   | MANAGER             | true   |
-| `emp_03` | EMP-003     | teller@bank.com    | teller123         | Tom        | Teller    | TELLER              | true   |
-| `emp_04` | EMP-004     | agent@bank.com     | agent123          | Carol      | Agent     | CALL_CENTER_AGENT   | true   |
+| `emp_02` | EMP-002     | teller@bank.com    | teller123         | Tom        | Teller    | TELLER              | true   |
+| `emp_03` | EMP-003     | agent@bank.com     | agent123          | Carol      | Agent     | CALL_CENTER_AGENT   | true   |
 
 ---
 
@@ -1644,8 +1560,7 @@ bank-api/
 │   │   │   ├── deposits.ts        # /admin/deposits endpoints
 │   │   │   ├── withdrawals.ts     # /admin/withdrawals endpoints
 │   │   │   ├── transactions.ts    # /admin/transactions endpoints
-│   │   │   ├── transfers.ts       # /admin/transfers endpoints
-│   │   │   └── payments.ts        # /admin/payments endpoints
+│   │   │   └── transfers.ts       # /admin/transfers endpoints
 │   │   └── ... (existing customer routes, modified)
 │   ├── middleware/
 │   │   └── auth.ts                # Add adminAuth middleware
@@ -1672,5 +1587,4 @@ app.route('/api/v1/admin/deposits', adminDepositRoutes)
 app.route('/api/v1/admin/withdrawals', adminWithdrawalRoutes)
 app.route('/api/v1/admin/transactions', adminTransactionRoutes)
 app.route('/api/v1/admin/transfers', adminTransferRoutes)
-app.route('/api/v1/admin/payments', adminPaymentRoutes)
 ```

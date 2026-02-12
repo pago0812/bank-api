@@ -14,7 +14,7 @@ npm run db:generate
 # Run migrations
 npm run db:migrate
 
-# Seed database (3 customers, 6 accounts, transactions, transfers, payments, cards)
+# Seed database (3 customers, 6 accounts, transactions, transfers, cards)
 npm run db:seed
 
 # Dev server with hot reload

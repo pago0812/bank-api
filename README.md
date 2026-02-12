@@ -1,6 +1,6 @@
 # Bank API
 
-A RESTful banking API built with Hono, Prisma, and PostgreSQL. Supports customer management, accounts, transactions, transfers, payments, cards, deposits, withdrawals, and identity verification.
+A RESTful banking API built with Hono, Prisma, and PostgreSQL. Supports customer management, accounts, transactions, transfers, cards, deposits, withdrawals, and identity verification.
 
 ## Prerequisites
 
@@ -99,14 +99,6 @@ All endpoints are under `/api/v1`. Authenticated routes require a `Authorization
 | ------ | ----------------------- | ---- | -------------------------------- |
 | `POST` | `/api/v1/transfers`     | Yes  | Create transfer between accounts |
 | `GET`  | `/api/v1/transfers/:id` | Yes  | Get transfer details             |
-
-### Payments
-
-| Method | Path                   | Auth | Description                   |
-| ------ | ---------------------- | ---- | ----------------------------- |
-| `POST` | `/api/v1/payments`     | Yes  | Create payment to beneficiary |
-| `GET`  | `/api/v1/payments`     | Yes  | List payments                 |
-| `GET`  | `/api/v1/payments/:id` | Yes  | Get payment details           |
 
 ### Cards
 

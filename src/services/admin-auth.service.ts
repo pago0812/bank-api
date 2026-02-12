@@ -18,6 +18,14 @@ export async function login(email: string, password: string) {
     throw new AppError(401, 'UNAUTHORIZED', 'Invalid email or password');
   }
 
+  if (employee.role === 'BOT') {
+    throw new AppError(401, 'UNAUTHORIZED', 'BOT employees must use API tokens');
+  }
+
+  if (!employee.password) {
+    throw new AppError(401, 'UNAUTHORIZED', 'Invalid email or password');
+  }
+
   const valid = await bcrypt.compare(password, employee.password);
   if (!valid) {
     throw new AppError(401, 'UNAUTHORIZED', 'Invalid email or password');

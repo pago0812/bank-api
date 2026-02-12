@@ -75,16 +75,6 @@ export const createTransferSchema = z.object({
   description: z.string().max(500).optional(),
 });
 
-// Payment schemas
-export const createPaymentSchema = z.object({
-  accountId: z.string().uuid('Invalid account ID'),
-  amount: z.number().int('Amount must be a whole number (cents)').positive('Amount must be greater than 0'),
-  beneficiaryName: z.string().min(1, 'Beneficiary name is required').max(200),
-  beneficiaryBank: z.string().min(1, 'Beneficiary bank is required').max(200),
-  beneficiaryAccount: z.string().min(1, 'Beneficiary account is required').max(50),
-  description: z.string().max(500).optional(),
-});
-
 // Card schemas
 export const createCardSchema = z.object({
   accountId: z.string().uuid('Invalid account ID'),
@@ -111,4 +101,23 @@ export const createWithdrawalSchema = z.object({
   accountId: z.string().uuid('Invalid account ID'),
   amount: z.number().int('Amount must be a whole number (cents)').positive('Amount must be greater than 0'),
   channel: z.enum(['ATM', 'TELLER', 'ONLINE'], { message: 'Channel must be ATM, TELLER, or ONLINE' }),
+});
+
+// Employee schemas
+export const createEmployeeSchema = z.object({
+  employeeId: z.string().min(1, 'Employee ID is required').regex(/^EMP-\d{3,}$/, 'Employee ID must be in format EMP-XXX'),
+  email: z.string().email('Invalid email format'),
+  password: z.string().min(8, 'Password must be at least 8 characters').optional(),
+  firstName: z.string().min(1, 'First name is required').max(100, 'First name too long'),
+  lastName: z.string().min(1, 'Last name is required').max(100, 'Last name too long'),
+  role: z.enum(['TELLER', 'ADMIN', 'CALL_CENTER_AGENT', 'BOT'], { message: 'Invalid role' }),
+});
+
+export const updateEmployeeSchema = z.object({
+  firstName: z.string().min(1).max(100).optional(),
+  lastName: z.string().min(1).max(100).optional(),
+  email: z.string().email('Invalid email format').optional(),
+  active: z.boolean().optional(),
+}).refine((data) => Object.keys(data).length > 0, {
+  message: 'At least one field must be provided',
 });

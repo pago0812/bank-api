@@ -10,7 +10,7 @@ const adminDeposits = new Hono<AppEnv>();
 
 adminDeposits.use('*', adminAuthMiddleware);
 
-adminDeposits.post('/', requireRole('TELLER', 'MANAGER', 'ADMIN'), idempotencyMiddleware, async (c) => {
+adminDeposits.post('/', requireRole('TELLER', 'ADMIN'), idempotencyMiddleware, async (c) => {
   const raw = c.get('parsedBody') || (await c.req.json());
   const body = validate(createDepositSchema, raw);
 

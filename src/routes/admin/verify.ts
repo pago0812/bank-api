@@ -8,7 +8,7 @@ import type { AppEnv } from '../../lib/types.js';
 const adminVerify = new Hono<AppEnv>();
 
 adminVerify.use('*', adminAuthMiddleware);
-adminVerify.use('*', requireRole('CALL_CENTER_AGENT', 'MANAGER', 'ADMIN'));
+adminVerify.use('*', requireRole('CALL_CENTER_AGENT', 'ADMIN'));
 
 adminVerify.post('/start', async (c) => {
   const body = await c.req.json();

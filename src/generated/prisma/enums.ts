@@ -52,15 +52,6 @@ export const TransferStatus = {
 export type TransferStatus = (typeof TransferStatus)[keyof typeof TransferStatus]
 
 
-export const PaymentStatus = {
-  PENDING: 'PENDING',
-  COMPLETED: 'COMPLETED',
-  FAILED: 'FAILED'
-} as const
-
-export type PaymentStatus = (typeof PaymentStatus)[keyof typeof PaymentStatus]
-
-
 export const CardType = {
   DEBIT: 'DEBIT',
   CREDIT: 'CREDIT'
@@ -118,9 +109,9 @@ export type CustomerStatus = (typeof CustomerStatus)[keyof typeof CustomerStatus
 
 export const EmployeeRole = {
   TELLER: 'TELLER',
-  MANAGER: 'MANAGER',
   ADMIN: 'ADMIN',
-  CALL_CENTER_AGENT: 'CALL_CENTER_AGENT'
+  CALL_CENTER_AGENT: 'CALL_CENTER_AGENT',
+  BOT: 'BOT'
 } as const
 
 export type EmployeeRole = (typeof EmployeeRole)[keyof typeof EmployeeRole]

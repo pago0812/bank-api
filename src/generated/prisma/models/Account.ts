@@ -255,7 +255,6 @@ export type AccountWhereInput = {
   withdrawals?: Prisma.WithdrawalListRelationFilter
   transfersFrom?: Prisma.TransferListRelationFilter
   transfersTo?: Prisma.TransferListRelationFilter
-  payments?: Prisma.PaymentListRelationFilter
 }
 
 export type AccountOrderByWithRelationInput = {
@@ -275,7 +274,6 @@ export type AccountOrderByWithRelationInput = {
   withdrawals?: Prisma.WithdrawalOrderByRelationAggregateInput
   transfersFrom?: Prisma.TransferOrderByRelationAggregateInput
   transfersTo?: Prisma.TransferOrderByRelationAggregateInput
-  payments?: Prisma.PaymentOrderByRelationAggregateInput
 }
 
 export type AccountWhereUniqueInput = Prisma.AtLeast<{
@@ -298,7 +296,6 @@ export type AccountWhereUniqueInput = Prisma.AtLeast<{
   withdrawals?: Prisma.WithdrawalListRelationFilter
   transfersFrom?: Prisma.TransferListRelationFilter
   transfersTo?: Prisma.TransferListRelationFilter
-  payments?: Prisma.PaymentListRelationFilter
 }, "id" | "accountNumber">
 
 export type AccountOrderByWithAggregationInput = {
@@ -349,7 +346,6 @@ export type AccountCreateInput = {
   withdrawals?: Prisma.WithdrawalCreateNestedManyWithoutAccountInput
   transfersFrom?: Prisma.TransferCreateNestedManyWithoutFromAccountInput
   transfersTo?: Prisma.TransferCreateNestedManyWithoutToAccountInput
-  payments?: Prisma.PaymentCreateNestedManyWithoutAccountInput
 }
 
 export type AccountUncheckedCreateInput = {
@@ -368,7 +364,6 @@ export type AccountUncheckedCreateInput = {
   withdrawals?: Prisma.WithdrawalUncheckedCreateNestedManyWithoutAccountInput
   transfersFrom?: Prisma.TransferUncheckedCreateNestedManyWithoutFromAccountInput
   transfersTo?: Prisma.TransferUncheckedCreateNestedManyWithoutToAccountInput
-  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutAccountInput
 }
 
 export type AccountUpdateInput = {
@@ -387,7 +382,6 @@ export type AccountUpdateInput = {
   withdrawals?: Prisma.WithdrawalUpdateManyWithoutAccountNestedInput
   transfersFrom?: Prisma.TransferUpdateManyWithoutFromAccountNestedInput
   transfersTo?: Prisma.TransferUpdateManyWithoutToAccountNestedInput
-  payments?: Prisma.PaymentUpdateManyWithoutAccountNestedInput
 }
 
 export type AccountUncheckedUpdateInput = {
@@ -406,7 +400,6 @@ export type AccountUncheckedUpdateInput = {
   withdrawals?: Prisma.WithdrawalUncheckedUpdateManyWithoutAccountNestedInput
   transfersFrom?: Prisma.TransferUncheckedUpdateManyWithoutFromAccountNestedInput
   transfersTo?: Prisma.TransferUncheckedUpdateManyWithoutToAccountNestedInput
-  payments?: Prisma.PaymentUncheckedUpdateManyWithoutAccountNestedInput
 }
 
 export type AccountCreateManyInput = {
@@ -603,20 +596,6 @@ export type AccountUpdateOneRequiredWithoutTransfersToNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.AccountUpdateToOneWithWhereWithoutTransfersToInput, Prisma.AccountUpdateWithoutTransfersToInput>, Prisma.AccountUncheckedUpdateWithoutTransfersToInput>
 }
 
-export type AccountCreateNestedOneWithoutPaymentsInput = {
-  create?: Prisma.XOR<Prisma.AccountCreateWithoutPaymentsInput, Prisma.AccountUncheckedCreateWithoutPaymentsInput>
-  connectOrCreate?: Prisma.AccountCreateOrConnectWithoutPaymentsInput
-  connect?: Prisma.AccountWhereUniqueInput
-}
-
-export type AccountUpdateOneRequiredWithoutPaymentsNestedInput = {
-  create?: Prisma.XOR<Prisma.AccountCreateWithoutPaymentsInput, Prisma.AccountUncheckedCreateWithoutPaymentsInput>
-  connectOrCreate?: Prisma.AccountCreateOrConnectWithoutPaymentsInput
-  upsert?: Prisma.AccountUpsertWithoutPaymentsInput
-  connect?: Prisma.AccountWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.AccountUpdateToOneWithWhereWithoutPaymentsInput, Prisma.AccountUpdateWithoutPaymentsInput>, Prisma.AccountUncheckedUpdateWithoutPaymentsInput>
-}
-
 export type AccountCreateNestedOneWithoutCardsInput = {
   create?: Prisma.XOR<Prisma.AccountCreateWithoutCardsInput, Prisma.AccountUncheckedCreateWithoutCardsInput>
   connectOrCreate?: Prisma.AccountCreateOrConnectWithoutCardsInput
@@ -674,7 +653,6 @@ export type AccountCreateWithoutCustomerInput = {
   withdrawals?: Prisma.WithdrawalCreateNestedManyWithoutAccountInput
   transfersFrom?: Prisma.TransferCreateNestedManyWithoutFromAccountInput
   transfersTo?: Prisma.TransferCreateNestedManyWithoutToAccountInput
-  payments?: Prisma.PaymentCreateNestedManyWithoutAccountInput
 }
 
 export type AccountUncheckedCreateWithoutCustomerInput = {
@@ -692,7 +670,6 @@ export type AccountUncheckedCreateWithoutCustomerInput = {
   withdrawals?: Prisma.WithdrawalUncheckedCreateNestedManyWithoutAccountInput
   transfersFrom?: Prisma.TransferUncheckedCreateNestedManyWithoutFromAccountInput
   transfersTo?: Prisma.TransferUncheckedCreateNestedManyWithoutToAccountInput
-  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutAccountInput
 }
 
 export type AccountCreateOrConnectWithoutCustomerInput = {
@@ -751,7 +728,6 @@ export type AccountCreateWithoutTransactionsInput = {
   withdrawals?: Prisma.WithdrawalCreateNestedManyWithoutAccountInput
   transfersFrom?: Prisma.TransferCreateNestedManyWithoutFromAccountInput
   transfersTo?: Prisma.TransferCreateNestedManyWithoutToAccountInput
-  payments?: Prisma.PaymentCreateNestedManyWithoutAccountInput
 }
 
 export type AccountUncheckedCreateWithoutTransactionsInput = {
@@ -769,7 +745,6 @@ export type AccountUncheckedCreateWithoutTransactionsInput = {
   withdrawals?: Prisma.WithdrawalUncheckedCreateNestedManyWithoutAccountInput
   transfersFrom?: Prisma.TransferUncheckedCreateNestedManyWithoutFromAccountInput
   transfersTo?: Prisma.TransferUncheckedCreateNestedManyWithoutToAccountInput
-  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutAccountInput
 }
 
 export type AccountCreateOrConnectWithoutTransactionsInput = {
@@ -803,7 +778,6 @@ export type AccountUpdateWithoutTransactionsInput = {
   withdrawals?: Prisma.WithdrawalUpdateManyWithoutAccountNestedInput
   transfersFrom?: Prisma.TransferUpdateManyWithoutFromAccountNestedInput
   transfersTo?: Prisma.TransferUpdateManyWithoutToAccountNestedInput
-  payments?: Prisma.PaymentUpdateManyWithoutAccountNestedInput
 }
 
 export type AccountUncheckedUpdateWithoutTransactionsInput = {
@@ -821,7 +795,6 @@ export type AccountUncheckedUpdateWithoutTransactionsInput = {
   withdrawals?: Prisma.WithdrawalUncheckedUpdateManyWithoutAccountNestedInput
   transfersFrom?: Prisma.TransferUncheckedUpdateManyWithoutFromAccountNestedInput
   transfersTo?: Prisma.TransferUncheckedUpdateManyWithoutToAccountNestedInput
-  payments?: Prisma.PaymentUncheckedUpdateManyWithoutAccountNestedInput
 }
 
 export type AccountCreateWithoutTransfersFromInput = {
@@ -839,7 +812,6 @@ export type AccountCreateWithoutTransfersFromInput = {
   deposits?: Prisma.DepositCreateNestedManyWithoutAccountInput
   withdrawals?: Prisma.WithdrawalCreateNestedManyWithoutAccountInput
   transfersTo?: Prisma.TransferCreateNestedManyWithoutToAccountInput
-  payments?: Prisma.PaymentCreateNestedManyWithoutAccountInput
 }
 
 export type AccountUncheckedCreateWithoutTransfersFromInput = {
@@ -857,7 +829,6 @@ export type AccountUncheckedCreateWithoutTransfersFromInput = {
   deposits?: Prisma.DepositUncheckedCreateNestedManyWithoutAccountInput
   withdrawals?: Prisma.WithdrawalUncheckedCreateNestedManyWithoutAccountInput
   transfersTo?: Prisma.TransferUncheckedCreateNestedManyWithoutToAccountInput
-  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutAccountInput
 }
 
 export type AccountCreateOrConnectWithoutTransfersFromInput = {
@@ -880,7 +851,6 @@ export type AccountCreateWithoutTransfersToInput = {
   deposits?: Prisma.DepositCreateNestedManyWithoutAccountInput
   withdrawals?: Prisma.WithdrawalCreateNestedManyWithoutAccountInput
   transfersFrom?: Prisma.TransferCreateNestedManyWithoutFromAccountInput
-  payments?: Prisma.PaymentCreateNestedManyWithoutAccountInput
 }
 
 export type AccountUncheckedCreateWithoutTransfersToInput = {
@@ -898,7 +868,6 @@ export type AccountUncheckedCreateWithoutTransfersToInput = {
   deposits?: Prisma.DepositUncheckedCreateNestedManyWithoutAccountInput
   withdrawals?: Prisma.WithdrawalUncheckedCreateNestedManyWithoutAccountInput
   transfersFrom?: Prisma.TransferUncheckedCreateNestedManyWithoutFromAccountInput
-  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutAccountInput
 }
 
 export type AccountCreateOrConnectWithoutTransfersToInput = {
@@ -932,7 +901,6 @@ export type AccountUpdateWithoutTransfersFromInput = {
   deposits?: Prisma.DepositUpdateManyWithoutAccountNestedInput
   withdrawals?: Prisma.WithdrawalUpdateManyWithoutAccountNestedInput
   transfersTo?: Prisma.TransferUpdateManyWithoutToAccountNestedInput
-  payments?: Prisma.PaymentUpdateManyWithoutAccountNestedInput
 }
 
 export type AccountUncheckedUpdateWithoutTransfersFromInput = {
@@ -950,7 +918,6 @@ export type AccountUncheckedUpdateWithoutTransfersFromInput = {
   deposits?: Prisma.DepositUncheckedUpdateManyWithoutAccountNestedInput
   withdrawals?: Prisma.WithdrawalUncheckedUpdateManyWithoutAccountNestedInput
   transfersTo?: Prisma.TransferUncheckedUpdateManyWithoutToAccountNestedInput
-  payments?: Prisma.PaymentUncheckedUpdateManyWithoutAccountNestedInput
 }
 
 export type AccountUpsertWithoutTransfersToInput = {
@@ -979,7 +946,6 @@ export type AccountUpdateWithoutTransfersToInput = {
   deposits?: Prisma.DepositUpdateManyWithoutAccountNestedInput
   withdrawals?: Prisma.WithdrawalUpdateManyWithoutAccountNestedInput
   transfersFrom?: Prisma.TransferUpdateManyWithoutFromAccountNestedInput
-  payments?: Prisma.PaymentUpdateManyWithoutAccountNestedInput
 }
 
 export type AccountUncheckedUpdateWithoutTransfersToInput = {
@@ -997,95 +963,6 @@ export type AccountUncheckedUpdateWithoutTransfersToInput = {
   deposits?: Prisma.DepositUncheckedUpdateManyWithoutAccountNestedInput
   withdrawals?: Prisma.WithdrawalUncheckedUpdateManyWithoutAccountNestedInput
   transfersFrom?: Prisma.TransferUncheckedUpdateManyWithoutFromAccountNestedInput
-  payments?: Prisma.PaymentUncheckedUpdateManyWithoutAccountNestedInput
-}
-
-export type AccountCreateWithoutPaymentsInput = {
-  id?: string
-  accountNumber: string
-  type: $Enums.AccountType
-  currency?: string
-  balance?: number
-  status?: $Enums.AccountStatus
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  customer: Prisma.CustomerCreateNestedOneWithoutAccountsInput
-  transactions?: Prisma.TransactionCreateNestedManyWithoutAccountInput
-  cards?: Prisma.CardCreateNestedManyWithoutAccountInput
-  deposits?: Prisma.DepositCreateNestedManyWithoutAccountInput
-  withdrawals?: Prisma.WithdrawalCreateNestedManyWithoutAccountInput
-  transfersFrom?: Prisma.TransferCreateNestedManyWithoutFromAccountInput
-  transfersTo?: Prisma.TransferCreateNestedManyWithoutToAccountInput
-}
-
-export type AccountUncheckedCreateWithoutPaymentsInput = {
-  id?: string
-  customerId: string
-  accountNumber: string
-  type: $Enums.AccountType
-  currency?: string
-  balance?: number
-  status?: $Enums.AccountStatus
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutAccountInput
-  cards?: Prisma.CardUncheckedCreateNestedManyWithoutAccountInput
-  deposits?: Prisma.DepositUncheckedCreateNestedManyWithoutAccountInput
-  withdrawals?: Prisma.WithdrawalUncheckedCreateNestedManyWithoutAccountInput
-  transfersFrom?: Prisma.TransferUncheckedCreateNestedManyWithoutFromAccountInput
-  transfersTo?: Prisma.TransferUncheckedCreateNestedManyWithoutToAccountInput
-}
-
-export type AccountCreateOrConnectWithoutPaymentsInput = {
-  where: Prisma.AccountWhereUniqueInput
-  create: Prisma.XOR<Prisma.AccountCreateWithoutPaymentsInput, Prisma.AccountUncheckedCreateWithoutPaymentsInput>
-}
-
-export type AccountUpsertWithoutPaymentsInput = {
-  update: Prisma.XOR<Prisma.AccountUpdateWithoutPaymentsInput, Prisma.AccountUncheckedUpdateWithoutPaymentsInput>
-  create: Prisma.XOR<Prisma.AccountCreateWithoutPaymentsInput, Prisma.AccountUncheckedCreateWithoutPaymentsInput>
-  where?: Prisma.AccountWhereInput
-}
-
-export type AccountUpdateToOneWithWhereWithoutPaymentsInput = {
-  where?: Prisma.AccountWhereInput
-  data: Prisma.XOR<Prisma.AccountUpdateWithoutPaymentsInput, Prisma.AccountUncheckedUpdateWithoutPaymentsInput>
-}
-
-export type AccountUpdateWithoutPaymentsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  accountNumber?: Prisma.StringFieldUpdateOperationsInput | string
-  type?: Prisma.EnumAccountTypeFieldUpdateOperationsInput | $Enums.AccountType
-  currency?: Prisma.StringFieldUpdateOperationsInput | string
-  balance?: Prisma.IntFieldUpdateOperationsInput | number
-  status?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  customer?: Prisma.CustomerUpdateOneRequiredWithoutAccountsNestedInput
-  transactions?: Prisma.TransactionUpdateManyWithoutAccountNestedInput
-  cards?: Prisma.CardUpdateManyWithoutAccountNestedInput
-  deposits?: Prisma.DepositUpdateManyWithoutAccountNestedInput
-  withdrawals?: Prisma.WithdrawalUpdateManyWithoutAccountNestedInput
-  transfersFrom?: Prisma.TransferUpdateManyWithoutFromAccountNestedInput
-  transfersTo?: Prisma.TransferUpdateManyWithoutToAccountNestedInput
-}
-
-export type AccountUncheckedUpdateWithoutPaymentsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  customerId?: Prisma.StringFieldUpdateOperationsInput | string
-  accountNumber?: Prisma.StringFieldUpdateOperationsInput | string
-  type?: Prisma.EnumAccountTypeFieldUpdateOperationsInput | $Enums.AccountType
-  currency?: Prisma.StringFieldUpdateOperationsInput | string
-  balance?: Prisma.IntFieldUpdateOperationsInput | number
-  status?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  transactions?: Prisma.TransactionUncheckedUpdateManyWithoutAccountNestedInput
-  cards?: Prisma.CardUncheckedUpdateManyWithoutAccountNestedInput
-  deposits?: Prisma.DepositUncheckedUpdateManyWithoutAccountNestedInput
-  withdrawals?: Prisma.WithdrawalUncheckedUpdateManyWithoutAccountNestedInput
-  transfersFrom?: Prisma.TransferUncheckedUpdateManyWithoutFromAccountNestedInput
-  transfersTo?: Prisma.TransferUncheckedUpdateManyWithoutToAccountNestedInput
 }
 
 export type AccountCreateWithoutCardsInput = {
@@ -1103,7 +980,6 @@ export type AccountCreateWithoutCardsInput = {
   withdrawals?: Prisma.WithdrawalCreateNestedManyWithoutAccountInput
   transfersFrom?: Prisma.TransferCreateNestedManyWithoutFromAccountInput
   transfersTo?: Prisma.TransferCreateNestedManyWithoutToAccountInput
-  payments?: Prisma.PaymentCreateNestedManyWithoutAccountInput
 }
 
 export type AccountUncheckedCreateWithoutCardsInput = {
@@ -1121,7 +997,6 @@ export type AccountUncheckedCreateWithoutCardsInput = {
   withdrawals?: Prisma.WithdrawalUncheckedCreateNestedManyWithoutAccountInput
   transfersFrom?: Prisma.TransferUncheckedCreateNestedManyWithoutFromAccountInput
   transfersTo?: Prisma.TransferUncheckedCreateNestedManyWithoutToAccountInput
-  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutAccountInput
 }
 
 export type AccountCreateOrConnectWithoutCardsInput = {
@@ -1155,7 +1030,6 @@ export type AccountUpdateWithoutCardsInput = {
   withdrawals?: Prisma.WithdrawalUpdateManyWithoutAccountNestedInput
   transfersFrom?: Prisma.TransferUpdateManyWithoutFromAccountNestedInput
   transfersTo?: Prisma.TransferUpdateManyWithoutToAccountNestedInput
-  payments?: Prisma.PaymentUpdateManyWithoutAccountNestedInput
 }
 
 export type AccountUncheckedUpdateWithoutCardsInput = {
@@ -1173,7 +1047,6 @@ export type AccountUncheckedUpdateWithoutCardsInput = {
   withdrawals?: Prisma.WithdrawalUncheckedUpdateManyWithoutAccountNestedInput
   transfersFrom?: Prisma.TransferUncheckedUpdateManyWithoutFromAccountNestedInput
   transfersTo?: Prisma.TransferUncheckedUpdateManyWithoutToAccountNestedInput
-  payments?: Prisma.PaymentUncheckedUpdateManyWithoutAccountNestedInput
 }
 
 export type AccountCreateWithoutDepositsInput = {
@@ -1191,7 +1064,6 @@ export type AccountCreateWithoutDepositsInput = {
   withdrawals?: Prisma.WithdrawalCreateNestedManyWithoutAccountInput
   transfersFrom?: Prisma.TransferCreateNestedManyWithoutFromAccountInput
   transfersTo?: Prisma.TransferCreateNestedManyWithoutToAccountInput
-  payments?: Prisma.PaymentCreateNestedManyWithoutAccountInput
 }
 
 export type AccountUncheckedCreateWithoutDepositsInput = {
@@ -1209,7 +1081,6 @@ export type AccountUncheckedCreateWithoutDepositsInput = {
   withdrawals?: Prisma.WithdrawalUncheckedCreateNestedManyWithoutAccountInput
   transfersFrom?: Prisma.TransferUncheckedCreateNestedManyWithoutFromAccountInput
   transfersTo?: Prisma.TransferUncheckedCreateNestedManyWithoutToAccountInput
-  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutAccountInput
 }
 
 export type AccountCreateOrConnectWithoutDepositsInput = {
@@ -1243,7 +1114,6 @@ export type AccountUpdateWithoutDepositsInput = {
   withdrawals?: Prisma.WithdrawalUpdateManyWithoutAccountNestedInput
   transfersFrom?: Prisma.TransferUpdateManyWithoutFromAccountNestedInput
   transfersTo?: Prisma.TransferUpdateManyWithoutToAccountNestedInput
-  payments?: Prisma.PaymentUpdateManyWithoutAccountNestedInput
 }
 
 export type AccountUncheckedUpdateWithoutDepositsInput = {
@@ -1261,7 +1131,6 @@ export type AccountUncheckedUpdateWithoutDepositsInput = {
   withdrawals?: Prisma.WithdrawalUncheckedUpdateManyWithoutAccountNestedInput
   transfersFrom?: Prisma.TransferUncheckedUpdateManyWithoutFromAccountNestedInput
   transfersTo?: Prisma.TransferUncheckedUpdateManyWithoutToAccountNestedInput
-  payments?: Prisma.PaymentUncheckedUpdateManyWithoutAccountNestedInput
 }
 
 export type AccountCreateWithoutWithdrawalsInput = {
@@ -1279,7 +1148,6 @@ export type AccountCreateWithoutWithdrawalsInput = {
   deposits?: Prisma.DepositCreateNestedManyWithoutAccountInput
   transfersFrom?: Prisma.TransferCreateNestedManyWithoutFromAccountInput
   transfersTo?: Prisma.TransferCreateNestedManyWithoutToAccountInput
-  payments?: Prisma.PaymentCreateNestedManyWithoutAccountInput
 }
 
 export type AccountUncheckedCreateWithoutWithdrawalsInput = {
@@ -1297,7 +1165,6 @@ export type AccountUncheckedCreateWithoutWithdrawalsInput = {
   deposits?: Prisma.DepositUncheckedCreateNestedManyWithoutAccountInput
   transfersFrom?: Prisma.TransferUncheckedCreateNestedManyWithoutFromAccountInput
   transfersTo?: Prisma.TransferUncheckedCreateNestedManyWithoutToAccountInput
-  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutAccountInput
 }
 
 export type AccountCreateOrConnectWithoutWithdrawalsInput = {
@@ -1331,7 +1198,6 @@ export type AccountUpdateWithoutWithdrawalsInput = {
   deposits?: Prisma.DepositUpdateManyWithoutAccountNestedInput
   transfersFrom?: Prisma.TransferUpdateManyWithoutFromAccountNestedInput
   transfersTo?: Prisma.TransferUpdateManyWithoutToAccountNestedInput
-  payments?: Prisma.PaymentUpdateManyWithoutAccountNestedInput
 }
 
 export type AccountUncheckedUpdateWithoutWithdrawalsInput = {
@@ -1349,7 +1215,6 @@ export type AccountUncheckedUpdateWithoutWithdrawalsInput = {
   deposits?: Prisma.DepositUncheckedUpdateManyWithoutAccountNestedInput
   transfersFrom?: Prisma.TransferUncheckedUpdateManyWithoutFromAccountNestedInput
   transfersTo?: Prisma.TransferUncheckedUpdateManyWithoutToAccountNestedInput
-  payments?: Prisma.PaymentUncheckedUpdateManyWithoutAccountNestedInput
 }
 
 export type AccountCreateManyCustomerInput = {
@@ -1378,7 +1243,6 @@ export type AccountUpdateWithoutCustomerInput = {
   withdrawals?: Prisma.WithdrawalUpdateManyWithoutAccountNestedInput
   transfersFrom?: Prisma.TransferUpdateManyWithoutFromAccountNestedInput
   transfersTo?: Prisma.TransferUpdateManyWithoutToAccountNestedInput
-  payments?: Prisma.PaymentUpdateManyWithoutAccountNestedInput
 }
 
 export type AccountUncheckedUpdateWithoutCustomerInput = {
@@ -1396,7 +1260,6 @@ export type AccountUncheckedUpdateWithoutCustomerInput = {
   withdrawals?: Prisma.WithdrawalUncheckedUpdateManyWithoutAccountNestedInput
   transfersFrom?: Prisma.TransferUncheckedUpdateManyWithoutFromAccountNestedInput
   transfersTo?: Prisma.TransferUncheckedUpdateManyWithoutToAccountNestedInput
-  payments?: Prisma.PaymentUncheckedUpdateManyWithoutAccountNestedInput
 }
 
 export type AccountUncheckedUpdateManyWithoutCustomerInput = {
@@ -1422,7 +1285,6 @@ export type AccountCountOutputType = {
   withdrawals: number
   transfersFrom: number
   transfersTo: number
-  payments: number
 }
 
 export type AccountCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1432,7 +1294,6 @@ export type AccountCountOutputTypeSelect<ExtArgs extends runtime.Types.Extension
   withdrawals?: boolean | AccountCountOutputTypeCountWithdrawalsArgs
   transfersFrom?: boolean | AccountCountOutputTypeCountTransfersFromArgs
   transfersTo?: boolean | AccountCountOutputTypeCountTransfersToArgs
-  payments?: boolean | AccountCountOutputTypeCountPaymentsArgs
 }
 
 /**
@@ -1487,13 +1348,6 @@ export type AccountCountOutputTypeCountTransfersToArgs<ExtArgs extends runtime.T
   where?: Prisma.TransferWhereInput
 }
 
-/**
- * AccountCountOutputType without action
- */
-export type AccountCountOutputTypeCountPaymentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.PaymentWhereInput
-}
-
 
 export type AccountSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1512,7 +1366,6 @@ export type AccountSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   withdrawals?: boolean | Prisma.Account$withdrawalsArgs<ExtArgs>
   transfersFrom?: boolean | Prisma.Account$transfersFromArgs<ExtArgs>
   transfersTo?: boolean | Prisma.Account$transfersToArgs<ExtArgs>
-  payments?: boolean | Prisma.Account$paymentsArgs<ExtArgs>
   _count?: boolean | Prisma.AccountCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["account"]>
 
@@ -1563,7 +1416,6 @@ export type AccountInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs
   withdrawals?: boolean | Prisma.Account$withdrawalsArgs<ExtArgs>
   transfersFrom?: boolean | Prisma.Account$transfersFromArgs<ExtArgs>
   transfersTo?: boolean | Prisma.Account$transfersToArgs<ExtArgs>
-  payments?: boolean | Prisma.Account$paymentsArgs<ExtArgs>
   _count?: boolean | Prisma.AccountCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type AccountIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1583,7 +1435,6 @@ export type $AccountPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     withdrawals: Prisma.$WithdrawalPayload<ExtArgs>[]
     transfersFrom: Prisma.$TransferPayload<ExtArgs>[]
     transfersTo: Prisma.$TransferPayload<ExtArgs>[]
-    payments: Prisma.$PaymentPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1996,7 +1847,6 @@ export interface Prisma__AccountClient<T, Null = never, ExtArgs extends runtime.
   withdrawals<T extends Prisma.Account$withdrawalsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Account$withdrawalsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$WithdrawalPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   transfersFrom<T extends Prisma.Account$transfersFromArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Account$transfersFromArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TransferPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   transfersTo<T extends Prisma.Account$transfersToArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Account$transfersToArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TransferPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  payments<T extends Prisma.Account$paymentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Account$paymentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PaymentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2572,30 +2422,6 @@ export type Account$transfersToArgs<ExtArgs extends runtime.Types.Extensions.Int
   take?: number
   skip?: number
   distinct?: Prisma.TransferScalarFieldEnum | Prisma.TransferScalarFieldEnum[]
-}
-
-/**
- * Account.payments
- */
-export type Account$paymentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the Payment
-   */
-  select?: Prisma.PaymentSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the Payment
-   */
-  omit?: Prisma.PaymentOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.PaymentInclude<ExtArgs> | null
-  where?: Prisma.PaymentWhereInput
-  orderBy?: Prisma.PaymentOrderByWithRelationInput | Prisma.PaymentOrderByWithRelationInput[]
-  cursor?: Prisma.PaymentWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.PaymentScalarFieldEnum | Prisma.PaymentScalarFieldEnum[]
 }
 
 /**

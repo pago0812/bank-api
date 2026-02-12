@@ -55,13 +55,13 @@ export const ModelName = {
   Account: 'Account',
   Transaction: 'Transaction',
   Transfer: 'Transfer',
-  Payment: 'Payment',
   Card: 'Card',
   Deposit: 'Deposit',
   Withdrawal: 'Withdrawal',
   VerificationSession: 'VerificationSession',
   RefreshToken: 'RefreshToken',
   Employee: 'Employee',
+  ApiToken: 'ApiToken',
   EmployeeRefreshToken: 'EmployeeRefreshToken',
   AuditLog: 'AuditLog',
   IdempotencyRecord: 'IdempotencyRecord'
@@ -147,22 +147,6 @@ export const TransferScalarFieldEnum = {
 export type TransferScalarFieldEnum = (typeof TransferScalarFieldEnum)[keyof typeof TransferScalarFieldEnum]
 
 
-export const PaymentScalarFieldEnum = {
-  id: 'id',
-  accountId: 'accountId',
-  amount: 'amount',
-  beneficiaryName: 'beneficiaryName',
-  beneficiaryBank: 'beneficiaryBank',
-  beneficiaryAccount: 'beneficiaryAccount',
-  reference: 'reference',
-  description: 'description',
-  status: 'status',
-  createdAt: 'createdAt'
-} as const
-
-export type PaymentScalarFieldEnum = (typeof PaymentScalarFieldEnum)[keyof typeof PaymentScalarFieldEnum]
-
-
 export const CardScalarFieldEnum = {
   id: 'id',
   accountId: 'accountId',
@@ -246,6 +230,20 @@ export const EmployeeScalarFieldEnum = {
 } as const
 
 export type EmployeeScalarFieldEnum = (typeof EmployeeScalarFieldEnum)[keyof typeof EmployeeScalarFieldEnum]
+
+
+export const ApiTokenScalarFieldEnum = {
+  id: 'id',
+  employeeId: 'employeeId',
+  token: 'token',
+  prefix: 'prefix',
+  name: 'name',
+  active: 'active',
+  lastUsedAt: 'lastUsedAt',
+  createdAt: 'createdAt'
+} as const
+
+export type ApiTokenScalarFieldEnum = (typeof ApiTokenScalarFieldEnum)[keyof typeof ApiTokenScalarFieldEnum]
 
 
 export const EmployeeRefreshTokenScalarFieldEnum = {

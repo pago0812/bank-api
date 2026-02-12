@@ -2,7 +2,7 @@
 
 ## 1. Overview
 
-A bank simulation API for testing and development purposes. It models the core operations of a retail bank: customer management, accounts, transactions, transfers, payments, cards, deposits, and withdrawals. It also supports a call-center identity verification flow.
+A bank simulation API for testing and development purposes. It models the core operations of a retail bank: customer management, accounts, transactions, transfers, cards, deposits, and withdrawals. It also supports a call-center identity verification flow.
 
 ### Tech Stack
 
@@ -168,12 +168,6 @@ enum TransferStatus {
   FAILED
 }
 
-enum PaymentStatus {
-  PENDING
-  COMPLETED
-  FAILED
-}
-
 enum CardType {
   DEBIT
   CREDIT
@@ -250,7 +244,6 @@ model Account {
 
   transfersFrom Transfer[] @relation("TransferFrom")
   transfersTo   Transfer[] @relation("TransferTo")
-  payments      Payment[]
 }
 
 model Transaction {
@@ -281,21 +274,6 @@ model Transfer {
 
   fromAccount Account @relation("TransferFrom", fields: [fromAccountId], references: [id])
   toAccount   Account @relation("TransferTo", fields: [toAccountId], references: [id])
-}
-
-model Payment {
-  id                 String        @id @default(uuid())
-  accountId          String
-  amount             Int           // in cents
-  beneficiaryName    String
-  beneficiaryBank    String
-  beneficiaryAccount String
-  reference          String        @unique @default(uuid())
-  description        String?
-  status             PaymentStatus @default(PENDING)
-  createdAt          DateTime      @default(now())
-
-  account Account @relation(fields: [accountId], references: [id])
 }
 
 model Card {
@@ -1122,7 +1100,7 @@ Update account status.
 
 ### 4.5 Transactions
 
-Transactions are **read-only records**. They are created automatically by transfers, payments, deposits, and withdrawals. Every transfer creates two transaction records: a DEBIT on the source account and a CREDIT on the destination account.
+Transactions are **read-only records**. They are created automatically by transfers, deposits, and withdrawals. Every transfer creates two transaction records: a DEBIT on the source account and a CREDIT on the destination account.
 
 #### `GET /api/v1/accounts/:accountId/transactions`
 
@@ -1345,151 +1323,7 @@ Get a transfer by ID.
 
 ---
 
-### 4.7 Payments
-
-Payments represent outgoing payments to external beneficiaries.
-
-#### `POST /api/v1/payments`
-
-Create a new payment.
-
-**Auth**: Bearer token
-
-**Request Headers**:
-
-| Header            | Required | Description            |
-|-------------------|----------|------------------------|
-| `Idempotency-Key` | No       | Unique idempotency key |
-
-**Request Body**:
-
-| Field                | Type     | Required | Description                    |
-|----------------------|----------|----------|--------------------------------|
-| `accountId`          | `string` | Yes      | Source account ID              |
-| `amount`             | `number` | Yes      | Amount in cents                |
-| `beneficiaryName`    | `string` | Yes      | Recipient name                 |
-| `beneficiaryBank`    | `string` | Yes      | Recipient bank name            |
-| `beneficiaryAccount` | `string` | Yes      | Recipient account number       |
-| `description`        | `string` | No       | Payment description            |
-
-**Request Example**:
-
-```json
-{
-  "accountId": "acc_01",
-  "amount": 75000,
-  "beneficiaryName": "Electric Company",
-  "beneficiaryBank": "National Bank",
-  "beneficiaryAccount": "9876543210",
-  "description": "January electricity bill"
-}
-```
-
-**Response `201 Created`**:
-
-```json
-{
-  "id": "pmt_01",
-  "accountId": "acc_01",
-  "amount": 75000,
-  "beneficiaryName": "Electric Company",
-  "beneficiaryBank": "National Bank",
-  "beneficiaryAccount": "9876543210",
-  "reference": "ref_pmt_01",
-  "description": "January electricity bill",
-  "status": "PENDING",
-  "createdAt": "2025-01-15T10:30:00.000Z"
-}
-```
-
-**Business Rules**:
-- Account must exist and be ACTIVE.
-- Account must have sufficient balance.
-- Amount must be positive (> 0).
-- Payment is created with status PENDING (simulates async processing).
-- On creation:
-  1. Account balance is decremented by `amount`.
-  2. A DEBIT transaction with status PENDING is created.
-- The payment transitions to COMPLETED automatically after 5 seconds (simulated via a setTimeout or similar mechanism). When it completes, the associated transaction status is also updated to COMPLETED.
-
----
-
-#### `GET /api/v1/payments/:id`
-
-Get a payment by ID.
-
-**Auth**: Bearer token
-
-**Path Params**:
-
-| Param | Type     | Description  |
-|-------|----------|--------------|
-| `id`  | `string` | Payment ID   |
-
-**Response `200 OK`**:
-
-```json
-{
-  "id": "pmt_01",
-  "accountId": "acc_01",
-  "amount": 75000,
-  "beneficiaryName": "Electric Company",
-  "beneficiaryBank": "National Bank",
-  "beneficiaryAccount": "9876543210",
-  "reference": "ref_pmt_01",
-  "description": "January electricity bill",
-  "status": "COMPLETED",
-  "createdAt": "2025-01-15T10:30:00.000Z"
-}
-```
-
----
-
-#### `GET /api/v1/payments`
-
-List payments with filters and pagination.
-
-**Auth**: Bearer token
-
-**Query Params**:
-
-| Param       | Type     | Default | Description                       |
-|-------------|----------|---------|-----------------------------------|
-| `page`      | `number` | `1`     | Page number                       |
-| `limit`     | `number` | `20`    | Items per page (max 100)          |
-| `accountId` | `string` | —       | Filter by account ID              |
-| `status`    | `string` | —       | Filter by PENDING, COMPLETED, FAILED |
-
-**Response `200 OK`**:
-
-```json
-{
-  "data": [
-    {
-      "id": "pmt_01",
-      "accountId": "acc_01",
-      "amount": 75000,
-      "beneficiaryName": "Electric Company",
-      "beneficiaryBank": "National Bank",
-      "beneficiaryAccount": "9876543210",
-      "reference": "ref_pmt_01",
-      "description": "January electricity bill",
-      "status": "COMPLETED",
-      "createdAt": "2025-01-15T10:30:00.000Z"
-    }
-  ],
-  "meta": {
-    "total": 5,
-    "page": 1,
-    "limit": 20,
-    "totalPages": 1
-  }
-}
-```
-
----
-
-### 4.8 Cards
+### 4.7 Cards
 
 #### `POST /api/v1/cards`
 
@@ -1705,7 +1539,7 @@ Cancel a card (soft delete).
 
 ---
 
-### 4.9 Deposits & Withdrawals
+### 4.8 Deposits & Withdrawals
 
 #### `POST /api/v1/deposits`
 
@@ -1964,11 +1798,11 @@ Start (phone number)
 
 ### Account Status Rules
 
-| Status   | Can Deposit | Can Withdraw | Can Transfer (from) | Can Transfer (to) | Can Pay | Can View |
-|----------|-------------|--------------|----------------------|--------------------|---------|----------|
-| ACTIVE   | Yes         | Yes          | Yes                  | Yes                | Yes     | Yes      |
-| FROZEN   | No          | No           | No                   | No                 | No      | Yes      |
-| CLOSED   | No          | No           | No                   | No                 | No      | Yes      |
+| Status   | Can Deposit | Can Withdraw | Can Transfer (from) | Can Transfer (to) | Can View |
+|----------|-------------|--------------|----------------------|--------------------|----------|
+| ACTIVE   | Yes         | Yes          | Yes                  | Yes                | Yes      |
+| FROZEN   | No          | No           | No                   | No                 | Yes      |
+| CLOSED   | No          | No           | No                   | No                 | Yes      |
 
 ### Transfer Rules
 
@@ -1978,14 +1812,6 @@ Start (phone number)
 - Source and destination must be different accounts.
 - Amount must be > 0.
 - Atomic: balance changes + transaction records + transfer record in a single DB transaction.
-
-### Payment Rules
-
-- Account must be ACTIVE.
-- Account must have `balance >= amount`.
-- Created with status PENDING.
-- Automatically transitions to COMPLETED after ~5 seconds.
-- Balance is deducted immediately on creation (not on completion).
 
 ### Card Rules
 
@@ -2084,14 +1910,6 @@ The following data is pre-populated when the application starts (via Prisma seed
 | `trf_01` | `acc_01` | `acc_02` | 100000 | Transfer to savings  | COMPLETED |
 | `trf_02` | `acc_03` | `acc_04` | 500000 | Transfer to savings  | COMPLETED |
 
-### Payments (sample)
-
-| ID       | Account  | Amount | Beneficiary         | Bank           | Status    |
-|----------|----------|--------|---------------------|----------------|-----------|
-| `pmt_01` | `acc_01` | 25000  | Electric Company    | National Bank  | COMPLETED |
-| `pmt_02` | `acc_01` | 15000  | Internet Provider   | City Bank      | COMPLETED |
-| `pmt_03` | `acc_03` | 95000  | Insurance Co.       | State Bank     | COMPLETED |
-
 ### Verification Test Scenarios
 
 These customers can be verified using the following answers:
@@ -2150,7 +1968,6 @@ bank-api/
 │   │   ├── accounts.ts        # /accounts endpoints
 │   │   ├── transactions.ts    # /accounts/:id/transactions, /transactions/:id
 │   │   ├── transfers.ts       # /transfers endpoints
-│   │   ├── payments.ts        # /payments endpoints
 │   │   ├── cards.ts           # /cards endpoints
 │   │   ├── deposits.ts        # /deposits endpoints
 │   │   └── withdrawals.ts     # /withdrawals endpoints
@@ -2161,7 +1978,6 @@ bank-api/
 │       ├── account.service.ts       # Account operations
 │       ├── transaction.service.ts   # Transaction queries
 │       ├── transfer.service.ts      # Transfer logic + atomic DB operations
-│       ├── payment.service.ts       # Payment creation + async completion
 │       ├── card.service.ts          # Card issuance + management
 │       ├── deposit.service.ts       # Deposit logic
 │       └── withdrawal.service.ts    # Withdrawal logic + limit checks

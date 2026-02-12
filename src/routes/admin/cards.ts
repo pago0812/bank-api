@@ -11,7 +11,7 @@ const adminCards = new Hono<AppEnv>();
 
 adminCards.use('*', adminAuthMiddleware);
 
-adminCards.post('/', requireRole('TELLER', 'MANAGER', 'ADMIN'), idempotencyMiddleware, async (c) => {
+adminCards.post('/', requireRole('TELLER', 'ADMIN'), idempotencyMiddleware, async (c) => {
   const raw = c.get('parsedBody') || (await c.req.json());
   const body = validate(createCardSchema, raw);
 
@@ -45,7 +45,7 @@ adminCards.get('/:id', async (c) => {
   return c.json(result);
 });
 
-adminCards.patch('/:id', requireRole('MANAGER', 'ADMIN', 'CALL_CENTER_AGENT'), async (c) => {
+adminCards.patch('/:id', requireRole('ADMIN', 'CALL_CENTER_AGENT'), async (c) => {
   const body = validate(updateCardSchema, await c.req.json());
   const result = await cardService.updateCard(c.req.param('id'), body);
 
@@ -60,7 +60,7 @@ adminCards.patch('/:id', requireRole('MANAGER', 'ADMIN', 'CALL_CENTER_AGENT'), a
   return c.json(result);
 });
 
-adminCards.delete('/:id', requireRole('MANAGER', 'ADMIN'), async (c) => {
+adminCards.delete('/:id', requireRole('ADMIN'), async (c) => {
   const result = await cardService.deleteCard(c.req.param('id'));
 
   await createAuditLog({

@@ -8,7 +8,7 @@ const adminAuditLogs = new Hono<AppEnv>();
 
 adminAuditLogs.use('*', adminAuthMiddleware);
 
-adminAuditLogs.get('/', requireRole('MANAGER', 'ADMIN'), async (c) => {
+adminAuditLogs.get('/', requireRole('ADMIN'), async (c) => {
   const query = c.req.query();
   const { page, limit, skip } = parsePagination(query);
   const { data, total } = await listAuditLogs({

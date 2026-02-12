@@ -38,11 +38,6 @@ export type Transaction = Prisma.TransactionModel
  */
 export type Transfer = Prisma.TransferModel
 /**
- * Model Payment
- * 
- */
-export type Payment = Prisma.PaymentModel
-/**
  * Model Card
  * 
  */
@@ -72,6 +67,11 @@ export type RefreshToken = Prisma.RefreshTokenModel
  * 
  */
 export type Employee = Prisma.EmployeeModel
+/**
+ * Model ApiToken
+ * 
+ */
+export type ApiToken = Prisma.ApiTokenModel
 /**
  * Model EmployeeRefreshToken
  * 

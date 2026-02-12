@@ -15,7 +15,6 @@ import customers from './routes/customers.js';
 import accounts from './routes/accounts.js';
 import transactions from './routes/transactions.js';
 import transfers from './routes/transfers.js';
-import payments from './routes/payments.js';
 import cards from './routes/cards.js';
 import deposits from './routes/deposits.js';
 import withdrawals from './routes/withdrawals.js';
@@ -29,8 +28,9 @@ import adminDeposits from './routes/admin/deposits.js';
 import adminWithdrawals from './routes/admin/withdrawals.js';
 import adminTransactions from './routes/admin/transactions.js';
 import adminTransfers from './routes/admin/transfers.js';
-import adminPayments from './routes/admin/payments.js';
 import adminAuditLogs from './routes/admin/audit-logs.js';
+import adminEmployees from './routes/admin/employees.js';
+import botRoutes from './routes/bot.js';
 
 const app = new Hono<AppEnv>();
 
@@ -71,7 +71,6 @@ api.route('/customers', customers);
 api.route('/accounts', accounts);
 api.route('/transactions', transactions);
 api.route('/transfers', transfers);
-api.route('/payments', payments);
 api.route('/cards', cards);
 api.route('/deposits', deposits);
 api.route('/withdrawals', withdrawals);
@@ -86,8 +85,9 @@ api.route('/admin/deposits', adminDeposits);
 api.route('/admin/withdrawals', adminWithdrawals);
 api.route('/admin/transactions', adminTransactions);
 api.route('/admin/transfers', adminTransfers);
-api.route('/admin/payments', adminPayments);
 api.route('/admin/audit-logs', adminAuditLogs);
+api.route('/admin/employees', adminEmployees);
+api.route('/bot', botRoutes);
 
 app.route('/api/v1', api);
 

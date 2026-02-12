@@ -1,7 +1,7 @@
 import { PrismaPg } from '@prisma/adapter-pg';
 import { PrismaClient } from '../src/generated/prisma/client.js';
 import bcrypt from 'bcryptjs';
-import { createHash } from 'crypto';
+import { createHash, randomBytes } from 'crypto';
 
 const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL! });
 const prisma = new PrismaClient({ adapter });
@@ -19,6 +19,7 @@ async function main() {
   console.log('Seeding database...');
 
   // Clean existing data
+  await prisma.apiToken.deleteMany();
   await prisma.auditLog.deleteMany();
   await prisma.employeeRefreshToken.deleteMany();
   await prisma.employee.deleteMany();
@@ -27,7 +28,6 @@ async function main() {
   await prisma.verificationSession.deleteMany();
   await prisma.transaction.deleteMany();
   await prisma.transfer.deleteMany();
-  await prisma.payment.deleteMany();
   await prisma.card.deleteMany();
   await prisma.deposit.deleteMany();
   await prisma.withdrawal.deleteMany();
@@ -260,49 +260,8 @@ async function main() {
     },
   });
 
-  // Create payments
-  await prisma.payment.create({
-    data: {
-      id: 'pmt_01',
-      accountId: 'acc_01',
-      amount: 25000,
-      beneficiaryName: 'Electric Company',
-      beneficiaryBank: 'National Bank',
-      beneficiaryAccount: '9876543210',
-      description: 'Electric bill',
-      status: 'COMPLETED',
-    },
-  });
-
-  await prisma.payment.create({
-    data: {
-      id: 'pmt_02',
-      accountId: 'acc_01',
-      amount: 15000,
-      beneficiaryName: 'Internet Provider',
-      beneficiaryBank: 'City Bank',
-      beneficiaryAccount: '8765432109',
-      description: 'Internet bill',
-      status: 'COMPLETED',
-    },
-  });
-
-  await prisma.payment.create({
-    data: {
-      id: 'pmt_03',
-      accountId: 'acc_03',
-      amount: 95000,
-      beneficiaryName: 'Insurance Co.',
-      beneficiaryBank: 'State Bank',
-      beneficiaryAccount: '7654321098',
-      description: 'Insurance payment',
-      status: 'COMPLETED',
-    },
-  });
-
   // Create employees
   const empHash1 = await bcrypt.hash('admin123', 10);
-  const empHash2 = await bcrypt.hash('manager123', 10);
   const empHash3 = await bcrypt.hash('teller123', 10);
   const empHash4 = await bcrypt.hash('agent123', 10);
 
@@ -315,19 +274,6 @@ async function main() {
       firstName: 'Alice',
       lastName: 'Admin',
       role: 'ADMIN',
-      active: true,
-    },
-  });
-
-  await prisma.employee.create({
-    data: {
-      id: 'emp_02',
-      employeeId: 'EMP-002',
-      email: 'manager@bank.com',
-      password: empHash2,
-      firstName: 'Mark',
-      lastName: 'Manager',
-      role: 'MANAGER',
       active: true,
     },
   });
@@ -357,6 +303,40 @@ async function main() {
       active: true,
     },
   });
+
+  // Create BOT employee with API token
+  const botEmployee = await prisma.employee.create({
+    data: {
+      id: 'emp_05',
+      employeeId: 'EMP-005',
+      email: 'ivr-bot@bank.com',
+      firstName: 'IVR',
+      lastName: 'Bot',
+      role: 'BOT',
+      active: true,
+    },
+  });
+
+  const rawSuffix = randomBytes(32).toString('hex');
+  const rawBotToken = `botk_${rawSuffix}`;
+  const botTokenHash = createHash('sha256').update(rawBotToken).digest('hex');
+  const botTokenPrefix = rawBotToken.slice(0, 13);
+
+  await prisma.apiToken.create({
+    data: {
+      employeeId: botEmployee.id,
+      token: botTokenHash,
+      prefix: botTokenPrefix,
+      name: 'Default',
+    },
+  });
+
+  console.log('');
+  console.log('=== BOT API TOKEN (save this, shown only once) ===');
+  console.log(`Employee: ${botEmployee.employeeId} (${botEmployee.firstName} ${botEmployee.lastName})`);
+  console.log(`Token: ${rawBotToken}`);
+  console.log('===================================================');
+  console.log('');
 
   console.log('Seed completed successfully!');
 }

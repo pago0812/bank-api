@@ -11,7 +11,7 @@ const adminAccounts = new Hono<AppEnv>();
 
 adminAccounts.use('*', adminAuthMiddleware);
 
-adminAccounts.post('/', requireRole('TELLER', 'MANAGER', 'ADMIN'), idempotencyMiddleware, async (c) => {
+adminAccounts.post('/', requireRole('TELLER', 'ADMIN'), idempotencyMiddleware, async (c) => {
   const raw = c.get('parsedBody') || (await c.req.json());
   const body = validate(createAccountSchema, raw);
 
@@ -47,7 +47,7 @@ adminAccounts.get('/:id', async (c) => {
   return c.json(result);
 });
 
-adminAccounts.patch('/:id', requireRole('MANAGER', 'ADMIN'), async (c) => {
+adminAccounts.patch('/:id', requireRole('ADMIN'), async (c) => {
   const body = validate(updateAccountSchema, await c.req.json());
   const result = await accountService.updateAccount(c.req.param('id'), body);
 

@@ -47,3 +47,25 @@ export async function verifyEmployeeAccessToken(token: string): Promise<{ sub: s
   }
   return payload as { sub: string; role: string };
 }
+
+export async function signBotSessionToken(customerId: string, employeeId: string): Promise<string> {
+  const now = Math.floor(Date.now() / 1000);
+  return sign(
+    {
+      sub: customerId,
+      type: 'bot_session',
+      botId: employeeId,
+      iat: now,
+      exp: now + 900, // 15 minutes
+    },
+    JWT_SECRET,
+  );
+}
+
+export async function verifyBotSessionToken(token: string): Promise<{ sub: string; botId: string }> {
+  const payload = await verify(token, JWT_SECRET, 'HS256');
+  if (payload.type !== 'bot_session') {
+    throw new Error('Invalid token type');
+  }
+  return payload as { sub: string; botId: string };
+}

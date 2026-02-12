@@ -11,7 +11,7 @@ const adminCustomers = new Hono<AppEnv>();
 
 adminCustomers.use('*', adminAuthMiddleware);
 
-adminCustomers.post('/', requireRole('TELLER', 'MANAGER', 'ADMIN'), idempotencyMiddleware, async (c) => {
+adminCustomers.post('/', requireRole('TELLER', 'ADMIN'), idempotencyMiddleware, async (c) => {
   const raw = c.get('parsedBody') || (await c.req.json());
   const body = validate(createCustomerSchema, raw);
 
@@ -45,7 +45,7 @@ adminCustomers.get('/:id', async (c) => {
   return c.json(result);
 });
 
-adminCustomers.patch('/:id', requireRole('MANAGER', 'ADMIN'), async (c) => {
+adminCustomers.patch('/:id', requireRole('ADMIN'), async (c) => {
   const body = validate(adminUpdateCustomerSchema, await c.req.json());
   const result = await customerService.updateCustomer(c.req.param('id'), body);
 
@@ -60,7 +60,7 @@ adminCustomers.patch('/:id', requireRole('MANAGER', 'ADMIN'), async (c) => {
   return c.json(result);
 });
 
-adminCustomers.delete('/:id', requireRole('MANAGER', 'ADMIN'), async (c) => {
+adminCustomers.delete('/:id', requireRole('ADMIN'), async (c) => {
   const result = await customerService.deleteCustomer(c.req.param('id'));
 
   await createAuditLog({

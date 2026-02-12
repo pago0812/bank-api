@@ -36,12 +36,6 @@ enum TransferStatus {
   FAILED
 }
 
-enum PaymentStatus {
-  PENDING
-  COMPLETED
-  FAILED
-}
-
 enum CardType {
   DEBIT
   CREDIT
@@ -81,9 +75,9 @@ enum CustomerStatus {
 
 enum EmployeeRole {
   TELLER
-  MANAGER
   ADMIN
   CALL_CENTER_AGENT
+  BOT
 }
 
 model Customer {
@@ -124,7 +118,6 @@ model Account {
 
   transfersFrom Transfer[] @relation("TransferFrom")
   transfersTo   Transfer[] @relation("TransferTo")
-  payments      Payment[]
 
   @@index([customerId])
 }
@@ -163,23 +156,6 @@ model Transfer {
 
   @@index([fromAccountId])
   @@index([toAccountId])
-}
-
-model Payment {
-  id                 String        @id @default(uuid())
-  accountId          String
-  amount             Int           // in cents
-  beneficiaryName    String
-  beneficiaryBank    String
-  beneficiaryAccount String
-  reference          String        @unique @default(uuid())
-  description        String?
-  status             PaymentStatus @default(PENDING)
-  createdAt          DateTime      @default(now())
-
-  account Account @relation(fields: [accountId], references: [id])
-
-  @@index([accountId])
 }
 
 model Card {
@@ -260,7 +236,7 @@ model Employee {
   id         String       @id @default(uuid())
   employeeId String       @unique // e.g. "EMP-001"
   email      String       @unique
-  password   String       // bcrypt hash
+  password   String?      // bcrypt hash (null for BOT employees)
   firstName  String
   lastName   String
   role       EmployeeRole
@@ -270,6 +246,22 @@ model Employee {
 
   refreshTokens EmployeeRefreshToken[]
   auditLogs     AuditLog[]
+  apiTokens     ApiToken[]
+}
+
+model ApiToken {
+  id         String    @id @default(uuid())
+  employeeId String
+  token      String    @unique // SHA-256 hash of the raw token
+  prefix     String    // first 8 chars for display (e.g., "botk_abc1")
+  name       String    @default("Default")
+  active     Boolean   @default(true)
+  lastUsedAt DateTime?
+  createdAt  DateTime  @default(now())
+
+  employee Employee @relation(fields: [employeeId], references: [id])
+
+  @@index([employeeId])
 }
 
 model EmployeeRefreshToken {
