@@ -1,4 +1,5 @@
 import type { Context } from 'hono';
+import { logger } from './logger.js';
 
 export class AppError extends Error {
   constructor(
@@ -13,6 +14,7 @@ export class AppError extends Error {
 
 export function errorHandler(err: Error, c: Context) {
   if (err instanceof AppError) {
+    logger.warn('app_error', { status: err.status, code: err.code, message: err.message });
     return c.json(
       {
         status: err.status,
@@ -24,7 +26,7 @@ export function errorHandler(err: Error, c: Context) {
     );
   }
 
-  console.error('Unhandled error:', err);
+  logger.error('unhandled_error', { error: err.message });
   return c.json(
     {
       status: 500,

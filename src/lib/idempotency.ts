@@ -2,6 +2,7 @@ import type { Context, Next } from 'hono';
 import { createHash } from 'crypto';
 import prisma from './prisma.js';
 import type { AppEnv } from './types.js';
+import { logger } from './logger.js';
 
 export async function idempotencyMiddleware(c: Context<AppEnv>, next: Next) {
   const key = c.req.header('Idempotency-Key');
@@ -54,10 +55,10 @@ async function runCleanup() {
       where: { createdAt: { lt: idempotencyCutoff } },
     });
     if (idempotencyCount > 0) {
-      console.log(JSON.stringify({ event: 'idempotency_cleanup', deleted: idempotencyCount }));
+      logger.info('idempotency_cleanup', { deleted: idempotencyCount });
     }
   } catch (err) {
-    console.error('Idempotency cleanup error:', err);
+    logger.error('idempotency_cleanup_error', { error: err instanceof Error ? err.message : String(err) });
   }
 
   try {
@@ -70,10 +71,10 @@ async function runCleanup() {
     });
     const totalTokens = customerTokens + employeeTokens;
     if (totalTokens > 0) {
-      console.log(JSON.stringify({ event: 'refresh_token_cleanup', deleted: totalTokens }));
+      logger.info('refresh_token_cleanup', { deleted: totalTokens });
     }
   } catch (err) {
-    console.error('Refresh token cleanup error:', err);
+    logger.error('refresh_token_cleanup_error', { error: err instanceof Error ? err.message : String(err) });
   }
 }
 

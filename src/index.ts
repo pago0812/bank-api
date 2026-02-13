@@ -9,6 +9,7 @@ import type { AppEnv } from './lib/types.js';
 import { ensureAdminEmployee } from './lib/admin-seed.js';
 import { requestLogger } from './middleware/logger.js';
 import { securityHeaders } from './middleware/security.js';
+import { logger } from './lib/logger.js';
 
 import auth from './routes/auth.js';
 import customers from './routes/customers.js';
@@ -97,13 +98,13 @@ const server = serve({
   fetch: app.fetch,
   port,
 }, async (info) => {
-  console.log(`Server is running on http://localhost:${info.port}`);
+  logger.info('server_started', { port: info.port });
   await ensureAdminEmployee();
   startIdempotencyCleanup();
 });
 
 const shutdown = async (signal: string) => {
-  console.log(`${signal} received, shutting down gracefully...`);
+  logger.info('server_shutdown', { signal });
   stopIdempotencyCleanup();
   server.close();
   await prisma.$disconnect();
