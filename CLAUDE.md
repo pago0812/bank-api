@@ -45,6 +45,6 @@ Requires `.env` with `DATABASE_URL` and `JWT_SECRET` (see `.env.example`). Postg
 - **Authorization**: `assertAccountOwnership(accountId, customerId)` and `assertCustomerOwnership()` from `src/lib/authorization.ts` enforce ownership. Called in routes before service calls.
 - **Idempotency**: Mutating routes use `idempotencyMiddleware`. When present, body is accessed via `c.get('parsedBody') || (await c.req.json())`.
 - **Pagination**: Uses `parsePagination(query)` → `{ page, limit, skip }` and `paginatedResponse(data, total, page, limit)`.
-- **Validation**: Manual validation in route handlers, throwing `AppError(422, 'VALIDATION_ERROR', ...)` with field-level details array.
+- **Validation**: `validate(zodSchema, data)` from `src/lib/validation.ts` — throws `AppError(422, 'VALIDATION_ERROR', ...)` with field-level details.
 - **Auth**: JWT access tokens (15min) via `hono/jwt`. Refresh tokens stored in DB.
 - **Types**: `AppEnv` in `src/lib/types.ts` defines Hono context variables (`customerId`, `parsedBody`, idempotency fields).
